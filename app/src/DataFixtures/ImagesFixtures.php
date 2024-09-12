@@ -1,19 +1,19 @@
 <?php
-
+ 
 namespace App\DataFixtures;
-
-use App\Entity\Produits;
+ 
 use App\Entity\Images;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\Entity\Produits;
 use Doctrine\Persistence\ObjectManager;
-
-class ImageFixtures extends Fixture
+use Doctrine\Bundle\FixturesBundle\Fixture;
+ 
+class ImagesFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
         // Chemin vers le dossier des images
         $imagePath = 'assets/img/';
-
+ 
         // Liste des produits et leurs images associées
         $productsData = [
             'Apple MacBook Pro 14' => ['Apple MacBook Pro 14.jpg', 'Apple MacBook Pro 14-1.jpg', 'Apple MacBook Pro 14-2.jpg'],
@@ -41,21 +41,23 @@ class ImageFixtures extends Fixture
             'Souris Logitech MX Master 3' => ['Souris Logitech MX Master 3.jpg', 'Souris Logitech MX Master 3.1.jpg', 'Souris Logitech MX Master 3.2.jpg'],
             'Clavier Mécanique Corsair' => ['Clavier Mécanique Corsair.jpg', 'Clavier Mécanique Corsair.1.jpg']
         ];
-
+ 
         foreach ($productsData as $productName => $imageNames) {
             $product = $manager->getRepository(Produits::class)->findOneBy(['name' => $productName]);
-
+ 
             if ($product) {
                 foreach ($imageNames as $imageName) {
                     $image = new Images();
-                    $image->setName($imagePath . $imageName);
+                    $image->setImage($imagePath . $imageName);
                     $image->setProduct($product);
-
+ 
                     $manager->persist($image);
                 }
             }
         }
-
+ 
         $manager->flush();
     }
+
+  
 }
