@@ -2,17 +2,32 @@
 
 namespace App\Controller;
 
+use App\Repository\ProduitsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
-    #[Route('/product', name: 'app_product')]
-    public function index(): Response
+    private $produitsRepository;
+
+    public function __construct(ProduitsRepository $produitsRepository)
     {
-        return $this->render('product/index.html.twig', [
-            'controller_name' => 'ProductController',
-        ]);
+        $this->produitsRepository = $produitsRepository;
     }
+
+    #[Route('/product/{id}', name: 'product_show')]
+    public function show($id): Response
+{
+    $productDetails = $this->produitsRepository->findProductDetails($id);
+
+    if (!$productDetails) {
+        throw $this->createNotFoundException('No product found for id '.$id);
+    }
+
+    return $this->render('product/show.html.twig', [
+        'product' => $productDetails
+
+    ]);
+}
 }

@@ -2,17 +2,32 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\ProduitsRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(): Response
+
+    private $produitsRepository;
+
+    public function __construct(ProduitsRepository $produitsRepository)
     {
+        $this->produitsRepository = $produitsRepository;
+    }
+
+
+
+    #[Route('/', name: 'home_index')]
+    public function index(ProduitsRepository $produitsRepository): Response
+    {
+        $produits = $produitsRepository->AllProduit();
+
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+            'produits' => $produits,
         ]);
     }
+
 }
+
