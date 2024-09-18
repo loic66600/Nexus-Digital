@@ -872,6 +872,9 @@ textarea.input {
 
 .product .product-img>img {
   width: 100%;
+  height: 250px;
+  object-fit: contain;
+
 }
 
 .product .product-img .product-label {
@@ -904,6 +907,7 @@ textarea.input {
   background-color: #FFF;
   text-align: center;
   z-index: 20;
+  height: 220px;
 }
 
 .product .product-body .product-category {

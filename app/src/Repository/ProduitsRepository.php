@@ -23,4 +23,30 @@ class ProduitsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByCategoryName(string $categoryName)
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.categories', 'c')
+            ->where('c.name = :name')
+            ->setParameter('name', $categoryName)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByCategory(?string $categoryName = null)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->leftJoin('p.images', 'i')
+            ->addSelect('i')
+            ->leftJoin('p.categories', 'c')
+            ->addSelect('c');
+    
+        if ($categoryName) {
+            $queryBuilder->andWhere('c.name = :categoryName')
+                ->setParameter('categoryName', urldecode($categoryName));
+        }
+    
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

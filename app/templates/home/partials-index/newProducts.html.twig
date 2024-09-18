@@ -77,18 +77,15 @@
 					<h3 class="title">New Products</h3>
 					<div class="section-nav">
 						<ul class="section-tab-nav tab-nav">
-							<li class="active">
-								<a data-toggle="tab" href="#tab1">Laptops</a>
+							<li class="{{ selectedCategory is null ? 'active' : '' }}">
+								<a href="{{ path('home_index') }}">All</a>
 							</li>
-							<li>
-								<a data-toggle="tab" href="#tab1">Smartphones</a>
-							</li>
-							<li>
-								<a data-toggle="tab" href="#tab1">Cameras</a>
-							</li>
-							<li>
-								<a data-toggle="tab" href="#tab1">Accessories</a>
-							</li>
+							{% for categorie in categories %}
+								{# Utilisez replace pour changer les espaces en tirets bas #}
+								<li class="{{ selectedCategory == categorie.name ? 'active' : '' }}">
+									<a href="{{ path('home_index', { 'category': categorie.name|replace({' ': '_'}) }) }}">{{ categorie.name }}</a>
+								</li>
+							{% endfor %}
 						</ul>
 					</div>
 				</div>
@@ -114,12 +111,11 @@
 												<img src="/assets/img/product01.png" alt="Default Image">
 											{% endif %}
 											<div class="product-label">
-												<span class="sale">-30%</span>
 												<span class="new">NEW</span>
 											</div>
 										</div>
 										<div class="product-body">
-											<p class="product-category">Category:
+											<p class="product-category">
 												{% for categorie in produit.categories %}
 													{{ categorie.name }}
 													{% if not loop.last %},

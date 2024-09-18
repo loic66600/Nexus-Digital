@@ -129,21 +129,18 @@
     var priceInputMax = document.getElementById('price-max'),
         priceInputMin = document.getElementById('price-min');
 
-    // Check if priceInputMax exists before adding the event listener
     if (priceInputMax) {
         priceInputMax.addEventListener('change', function(){
             updatePriceSlider($(this).parent(), this.value);
         });
     }
 
-    // Check if priceInputMin exists before adding the event listener
     if (priceInputMin) {
         priceInputMin.addEventListener('change', function(){
             updatePriceSlider($(this).parent(), this.value);
         });
     }
 
-    // Update price slider function
     function updatePriceSlider(elem , value) {
         if ( elem.hasClass('price-min') ) {
             console.log('min');
@@ -154,24 +151,47 @@
         }
     }
 
-    // Price Slider
-    var priceSlider = document.getElementById('price-slider');
-    if (priceSlider) {
-        noUiSlider.create(priceSlider, {
-            start: [1, 999],
-            connect: true,
-            step: 1,
-            range: {
-                'min': 1,
-                'max': 999
+    $(document).ready(function() {
+        $('.section-tab-nav a').on('click', function(event) {
+            event.preventDefault(); // Empêche le comportement par défaut du lien
+    
+            var hrefValue = $(this).attr('href');
+            
+            if (hrefValue.startsWith('/')) {
+                var category = hrefValue.substring(1); // Enlève la barre oblique initiale
+                console.log('Category selected:', category);
+    
+                // Redirige vers la page avec la catégorie sélectionnée
+                window.location.href = '/' + encodeURIComponent(category); 
+            } else {
+                console.error('Invalid href:', hrefValue);
             }
         });
+    });
 
-        priceSlider.noUiSlider.on('update', function(values, handle) {
-            var value = values[handle];
-            handle ? priceInputMax.value = value : priceInputMin.value = value;
-        });
-    }
+   // Price Slider
+   var priceSlider = document.getElementById('price-slider');
+   
+   if (priceSlider) {
+       noUiSlider.create(priceSlider, {
+           start: [1, 999],
+           connect: true,
+           step: 1,
+           range: {
+               'min': 1,
+               'max': 999
+           }
+       });
+
+       priceSlider.noUiSlider.on('update', function(values, handle) {
+           var value = values[handle];
+           
+           if(handle) { 
+              priceInputMax.value = value; 
+           } else { 
+              priceInputMin.value = value; 
+           }
+       });
+   }
 
 })(jQuery);
-
