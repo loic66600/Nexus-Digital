@@ -16,14 +16,16 @@ class CategorieRepository extends ServiceEntityRepository
         parent::__construct($registry, Categorie::class);
     }
 
-    public function findAllWithProducts(): array
+    public function findOneByIdWithProducts(int $id): ?Categorie
     {
         return $this->createQueryBuilder('c')
             ->leftJoin('c.produits', 'p')
             ->addSelect('p')
             ->leftJoin('p.images', 'i')
             ->addSelect('i')
+            ->where('c.id = :id')
+            ->setParameter('id', $id)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
     }
 }

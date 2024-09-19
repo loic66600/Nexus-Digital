@@ -42,12 +42,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="product-body">
-                                        <p class="product-category">
-                                            {% for categorie in produit.categories %}
-                                                {{ categorie.name }}
-                                                {% if not loop.last %}, {% endif %}
-                                            {% endfor %}
-                                        </p>
+                                        <p class="product-category">{{ category.name }}</p>
                                         <h3 class="product-name"><a href="{{ path('product_show', {'id': produit.id}) }}">{{ produit.name }}</a></h3>
                                         <h4 class="product-price">{{ produit.prices }} €</h4>
                                         <div class="product-rating">
