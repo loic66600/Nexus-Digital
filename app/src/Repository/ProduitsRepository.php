@@ -49,4 +49,21 @@ class ProduitsRepository extends ServiceEntityRepository
     
         return $queryBuilder->getQuery()->getResult();
     }
+
+    public function findProductDetails(int $id)
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.images', 'i')
+            ->addSelect('i')
+            ->leftJoin('p.categories', 'c')
+            ->addSelect('c')
+            ->leftJoin('p.avis', 'a') // Joindre les avis
+            ->addSelect('a') 
+            ->leftJoin('p.stocks', 's') // Joindre les stocks
+            ->addSelect('s') 
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
