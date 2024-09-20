@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Utilisateurs{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Liste des Utilisateurs</h1>
+
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Email</th>
+                    <th>Rôles</th>
+                    <th>Mot de passe</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Téléphone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                    <td>{{ user.password }}</td>
+                    <td>{{ user.lastName }}</td>
+                    <td>{{ user.firstName }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td class="d-flex justify-content-around">
+                        <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-primary btn-custom">Voir</a>
+                        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning btn-custom">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8" class="text-center">Aucun enregistrement trouvé</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end">
+            <a href="{{ path('app_user_new') }}" class="btn btn-success btn-custom mt-3">Créer Nouveau</a>
+        </div>
+    </div>
+{% endblock %}

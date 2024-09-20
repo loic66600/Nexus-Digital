@@ -19,20 +19,46 @@ class HomeController extends AbstractController
         $this->categorieRepository = $categorieRepository;
     }
 
-    #[Route('/{category}', name: 'home_index', defaults: ['category' => null])]
+    #[Route('/', name: 'home_index', defaults: ['category' => null])]
     public function index(?string $category): Response
     {
         if ($category) {
             // Remplacez les tirets bas par des espaces pour correspondre aux noms dans la base de données
             $category = str_replace('_', ' ', $category);
+            $produits = $this->produitsRepository->findByCategoryName($category);
+        } else {
+            // Récupérer tous les produits si aucune catégorie n'est spécifiée
+            $produits = $this->produitsRepository->AllProduit();
         }
-    
-        $produits = $this->produitsRepository->findByCategory($category);
+
+        // Récupérer toutes les catégories pour l'affichage des onglets
         $categories = $this->categorieRepository->findAll();
-    
+
         return $this->render('home/index.html.twig', [
             'produits' => $produits,
             'selectedCategory' => $category,
+            'categories' => $categories,
+        ]);
+    }
+
+    #[Route('/home-categorie/{id}', name:'app_home_category')]
+    public function category(int $id): Response
+    {
+        // Récupérer la catégorie sélectionnée
+        $category = $this->categorieRepository->findOneById($id);
+        if (!$category) {
+            throw $this->createNotFoundException('No category found for id ' . $id);
+        }
+
+        // Récupérer tous les produits de la catégorie sélectionnée
+        $produits = $this->produitsRepository->findByCategoryName($category->getName());
+
+        // Récupérer toutes les catégories pour l'affichage des onglets
+        $categories = $this->categorieRepository->findAll();
+
+        return $this->render('home/index.html.twig', [
+            'produits' => $produits,
+            'selectedCategory' => $category->getName(),
             'categories' => $categories,
         ]);
     }

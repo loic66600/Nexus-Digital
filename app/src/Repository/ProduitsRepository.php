@@ -48,8 +48,8 @@ class ProduitsRepository extends ServiceEntityRepository
         }
     
         return $queryBuilder->getQuery()->getResult();
-    }
-
+    }  
+    
     public function findProductDetails(int $id)
     {
         return $this->createQueryBuilder('p')
