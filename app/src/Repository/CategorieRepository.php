@@ -6,9 +6,6 @@ use App\Entity\Categorie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Categorie>
- */
 class CategorieRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -21,8 +18,6 @@ class CategorieRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('c')
             ->leftJoin('c.produits', 'p')
             ->addSelect('p')
-            ->leftJoin('p.images', 'i')
-            ->addSelect('i')
             ->where('c.id = :id')
             ->setParameter('id', $id)
             ->getQuery()

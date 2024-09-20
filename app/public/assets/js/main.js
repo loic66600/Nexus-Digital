@@ -151,23 +151,43 @@
         }
     }
 
-    $(document).ready(function() {
-        $('.section-tab-nav a').on('click', function(event) {
-            event.preventDefault(); // Empêche le comportement par défaut du lien
+    // $(document).ready(function() {
+    //     $('.section-tab-nav a').on('click', function(event) {
+    //         event.preventDefault(); // Empêche le comportement par défaut du lien
     
-            var hrefValue = $(this).attr('href');
+    //         var hrefValue = $(this).attr('href');
             
-            if (hrefValue.startsWith('/')) {
-                var category = hrefValue.substring(1); // Enlève la barre oblique initiale
-                console.log('Category selected:', category);
+    //         if (hrefValue.startsWith('/')) {
+    //             var category = hrefValue.substring(1); // Enlève la barre oblique initiale
+    //             console.log('Category selected:', category);
     
-                // Redirige vers la page avec la catégorie sélectionnée
-                window.location.href = '/' + encodeURIComponent(category); 
-            } else {
-                console.error('Invalid href:', hrefValue);
-            }
-        });
-    });
+    //             // Redirige vers la page avec la catégorie sélectionnée
+    //             window.location.href = '/' + encodeURIComponent(category); 
+    //         } else {
+    //             console.error('Invalid href:', hrefValue);
+    //         }
+    //     });
+    // });
+
+    // $(document).ready(function() {
+    //     $('.section-tab-nav a').on('click', function(event) {
+    //         event.preventDefault(); // Empêche le comportement par défaut du lien
+    
+    //         var hrefValue = $(this).attr('href');
+            
+    //         if (hrefValue.startsWith('#')) {
+    //             var category = hrefValue.substring(1); // Enlève le dièse initial
+    //             console.log('Category selected:', category);
+    
+    //             // Redirige vers la section avec la catégorie sélectionnée
+    //             $('html, body').animate({
+    //                 scrollTop: $("#" + category).offset().top
+    //             }, 1000);
+    //         } else {
+    //             console.error('Invalid href:', hrefValue);
+    //         }
+    //     });
+    // });
 
    // Price Slider
    var priceSlider = document.getElementById('price-slider');

@@ -42,9 +42,8 @@
 		{% block body %}
 
 			{{ include('home/partials-index/header.html.twig') }}
-            {{ include('home/partials-index/navigation.html.twig') }}
-			{{ include('categories/categories.html.twig') }}
-			{{ include('categories/show.html.twig') }}
+            {# {{ include('home/partials-index/navigation.html.twig') }} #}
+			{{ include('categories/categories.html.twig') }}	
 			{{ include('home/partials-index/newsletter.html.twig') }}
 			{{ include('home/partials-index/footer.html.twig') }}
 
@@ -53,7 +52,7 @@
 		{% block javascripts %}
 			{{ encore_entry_script_tags('app') }}
 
-			<!-- jQuery Plugins -->
+		
 			<!-- jQuery Plugins -->
 			<script src="/assets/js/jquery.min.js"></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>

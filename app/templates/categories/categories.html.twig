@@ -1,30 +1,23 @@
 <!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
-    <!-- container -->
     <div class="container">
-        <!-- row -->
         <div class="row">
             <div class="col-md-12">
                 <h3 class="breadcrumb-header">Categories</h3>
-                <ul class="breadcrumb-tree">
+                <ul class="breadcrumb-tree section-tab-nav">
                     <li><a href="/">Home</a></li>
-                    {% for category in categories %}
-                        <li><a href="#{{ category.name }}">{{ category.name }}</a></li>
+                    {% for category in menuCategories %}
+                        <li><a href="{{ path('category_show', {'id': category.id}) }}">{{ category.name }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
-        <!-- /row -->
     </div>
-    <!-- /container -->
 </div>
-<!-- /BREADCRUMB -->
 
 <!-- SECTION -->
 <div class="section">
-    <!-- container -->
     <div class="container">
-        <!-- row -->
         <div class="row">
             {% for category in categories %}
                 <div id="{{ category.name }}" class="col-md-12">
@@ -69,8 +62,7 @@
                 </div>
             {% endfor %}
         </div>
-        <!-- /row -->
     </div>
-    <!-- /container -->
 </div>
-<!-- /SECTION -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
