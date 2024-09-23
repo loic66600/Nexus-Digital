@@ -8,3 +8,7 @@ WHERE p.id = i.product_id
 
 SELECT*
 FROM produits as p
+
+SELECT * FROM status WHERE label = 'Pending'
+
+INSERT INTO status (label) VALUES ('Pending');
