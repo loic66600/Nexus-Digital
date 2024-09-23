@@ -12,22 +12,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class WishlistController extends AbstractController
 {
     #[Route('/wishlist/add/{id}', name: 'wishlist_add', methods: ['POST'])]
-    public function add(Produits $produit, EntityManagerInterface $entityManager, Request $request): Response
+    public function add(Produits $produit, Request $request): Response
     {
         // Vérifier si l'utilisateur est authentifié
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Logique pour ajouter le produit à la wishlist de l'utilisateur
-        $user = $this->getUser();
-        if (method_exists($user, 'getWishlist')) {
-            $wishlist = $user->getWishlist();
-            if (!$wishlist->contains($produit)) {
-                $wishlist->add($produit);
-                $entityManager->flush();
-                $this->addFlash('success', 'Produit ajouté à votre liste de souhaits.');
-            } else {
-                $this->addFlash('info', 'Produit déjà dans votre liste de souhaits.');
-            }
+        // Ajouter le produit à la session de wishlist
+        $session = $request->getSession();
+        $wishlist = $session->get('wishlist', []);
+
+        if (!in_array($produit->getId(), $wishlist)) {
+            $wishlist[] = $produit->getId();
+            $session->set('wishlist', $wishlist);
+            $this->addFlash('success', 'Produit ajouté à votre liste de souhaits.');
+        } else {
+            $this->addFlash('info', 'Produit déjà dans votre liste de souhaits.');
         }
 
         // Rediriger vers la page précédente
@@ -35,19 +34,23 @@ class WishlistController extends AbstractController
     }
 
     #[Route('/wishlist', name: 'wishlist_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
         // Vérifier si l'utilisateur est authentifié
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Récupérer la wishlist de l'utilisateur actuel
-        $wishlist = null;
-        if ($this->getUser() && method_exists($this->getUser(), 'getWishlist')) {
-            $wishlist = $this->getUser()->getWishlist();
+        // Récupérer les produits de la wishlist à partir de la session
+        $session = $request->getSession();
+        $wishlistIds = $session->get('wishlist', []);
+        
+        if (!empty($wishlistIds)) {
+            $wishlistProducts = $entityManager->getRepository(Produits::class)->findBy(['id' => $wishlistIds]);
+        } else {
+            $wishlistProducts = [];
         }
 
         return $this->render('wishlist/index.html.twig', [
-            'wishlist' => $wishlist,
+            'wishlist' => $wishlistProducts,
         ]);
     }
 }

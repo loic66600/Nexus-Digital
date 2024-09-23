@@ -15,24 +15,34 @@ use Symfony\Component\Routing\Annotation\Route;
 class CartController extends AbstractController
 {
     #[Route('/cart', name: 'app_cart', methods: ['GET'])]
-    public function index(): Response
+    public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
         // Vérifier si l'utilisateur est authentifié
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Récupérer le panier et la wishlist de l'utilisateur actuel
+        // Récupérer le panier de l'utilisateur actuel
         $panier = null;
-        $wishlist = null;
         if ($this->getUser()) {
             $panier = $this->getUser()->getPaniers()->last();
-            $wishlist = method_exists($this->getUser(), 'getWishlist') ? $this->getUser()->getWishlist() : null;
+        }
+
+        // Récupérer la wishlist à partir de la session
+        $session = $request->getSession();
+        $wishlistIds = $session->get('wishlist', []);
+        
+        if (!empty($wishlistIds)) {
+            $wishlistProducts = $entityManager->getRepository(Produits::class)->findBy(['id' => $wishlistIds]);
+        } else {
+            $wishlistProducts = [];
         }
 
         return $this->render('cart/index.html.twig', [
             'panier' => $panier,
-            'wishlist' => $wishlist,
+            'wishlist' => $wishlistProducts,
+            'wishlistCount' => count($wishlistIds),
         ]);
     }
+
     #[Route('/cart/add/{id}', name: 'cart_add', methods: ['POST'])]
     public function add(Produits $produit, EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -108,5 +118,27 @@ class CartController extends AbstractController
 
         // Rediriger vers la page du panier
         return $this->redirectToRoute('app_cart');
+    }
+
+    #[Route('/wishlist/add/{id}', name: 'wishlist_add', methods: ['POST'])]
+    public function addWishlist(Produits $produit, Request $request): Response
+    {
+        // Vérifier si l'utilisateur est authentifié
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // Ajouter le produit à la session de wishlist
+        $session = $request->getSession();
+        $wishlist = $session->get('wishlist', []);
+
+        if (!in_array($produit->getId(), $wishlist)) {
+            $wishlist[] = $produit->getId();
+            $session->set('wishlist', $wishlist);
+            $this->addFlash('success', 'Produit ajouté à votre liste de souhaits.');
+        } else {
+            $this->addFlash('info', 'Produit déjà dans votre liste de souhaits.');
+        }
+
+        // Rediriger vers la page précédente
+        return $this->redirect($request->headers->get('referer'));
     }
 }
