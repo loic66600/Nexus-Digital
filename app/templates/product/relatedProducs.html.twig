@@ -10,6 +10,17 @@
                     <h3 class="title">Produits Associés</h3>
                 </div>
             </div>
+            <!-- Messages Flash -->
+            {% for label, messages in app.flashes %}
+                <div class="col-md-12">
+                    <div class="alert alert-{{ label }} fade-out">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+            <!-- /Messages Flash -->
 
             {% for associatedProduct in associatedProducts %}
                 <!-- product -->
@@ -29,7 +40,9 @@
                                     {% if not loop.last %}, {% endif %}
                                 {% endfor %}
                             </p>
-                            <h3 class="product-name"><a href="{{ path('product_show', {'id': associatedProduct.id}) }}">{{ associatedProduct.name }}</a></h3>
+                            <h3 class="product-name">
+                                <a href="{{ path('product_show', {'id': associatedProduct.id}) }}">{{ associatedProduct.name }}</a>
+                            </h3>
                             <h4 class="product-price">{{ associatedProduct.prices }} €</h4>
                             <div class="product-rating">
                                 {% for i in 1..5 %}
@@ -41,12 +54,19 @@
                                 {% endfor %}
                             </div>
                             <div class="product-btns">
-                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">ajouter à la liste de souhaits</span></button>
-                                <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">ajouter pour comparer</span></button>
+                                <button class="add-to-wishlist">
+                                    <i class="fa fa-heart-o"></i>
+                                    <span class="tooltipp">ajouter à la liste de souhaits</span>
+                                </button>
                             </div>
                         </div>
+                        <!-- Formulaire d'ajout au panier -->
                         <div class="add-to-cart">
-                            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> aperçu rapide</button>
+                            <form action="{{ path('cart_add', {'id': associatedProduct.id}) }}" method="post" style="display: inline;">
+                                <button type="submit" class="add-to-cart-btn btn btn-success">
+                                    <i class="fa fa-shopping-cart"></i> Ajouter au panier
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

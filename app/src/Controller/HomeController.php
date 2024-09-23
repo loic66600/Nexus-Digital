@@ -34,14 +34,18 @@ class HomeController extends AbstractController
         // Récupérer toutes les catégories pour l'affichage des onglets
         $categories = $this->categorieRepository->findAll();
 
+        // Récupérer le panier de l'utilisateur actuel
+        $panier = $this->getPanier();
+
         return $this->render('home/index.html.twig', [
             'produits' => $produits,
             'selectedCategory' => $category,
             'categories' => $categories,
+            'panier' => $panier,
         ]);
     }
 
-    #[Route('/home-categorie/{id}', name:'app_home_category')]
+    #[Route('/home-categorie/{id}', name: 'app_home_category')]
     public function category(int $id): Response
     {
         // Récupérer la catégorie sélectionnée
@@ -56,10 +60,23 @@ class HomeController extends AbstractController
         // Récupérer toutes les catégories pour l'affichage des onglets
         $categories = $this->categorieRepository->findAll();
 
+        // Récupérer le panier de l'utilisateur actuel
+        $panier = $this->getPanier();
+
         return $this->render('home/index.html.twig', [
             'produits' => $produits,
             'selectedCategory' => $category->getName(),
             'categories' => $categories,
+            'panier' => $panier,
         ]);
+    }
+
+    private function getPanier()
+    {
+        // Fonction pour récupérer le panier de l'utilisateur actuel
+        if ($user = $this->getUser()) {
+            return method_exists($user, 'getPaniers') ? $user->getPaniers()->last() : null;
+        }
+        return null;
     }
 }

@@ -5,6 +5,18 @@
 	<div
 		class="container">
 		<!-- ligne -->
+					<!-- Messages Flash -->
+					{% for label, messages in app.flashes %}
+					<div class="col-md-12">
+						<div class="alert alert-{{ label }} fade-out">
+							{% for message in messages %}
+								<p>{{ message }}</p>
+							{% endfor %}
+						</div>
+					</div>
+				{% endfor %}
+				<!-- /Messages Flash -->
+	
 		<div
 			class="row">
 			<!-- Image principale du produit -->
@@ -88,24 +100,22 @@
 
 					<!-- Bouton Ajouter au panier -->
 					<div class="add-to-cart">
-						<button class="add-to-cart-btn">
-							<i class="fa fa-shopping-cart"></i>
-							ajouter au panier
+					<form action="{{ path('cart_add', {'id': product.id}) }}" method="post">
+						<button type="submit" class="add-to-cart-btn">
+							<i class="fa fa-shopping-cart"></i> Ajouter au panier
 						</button>
-					</div>
+					</form>
+				</div>
 
 					<!-- Boutons Liste de souhaits et Comparer -->
 					<ul class="product-btns">
-						<li>
-							<a href="#">
+						{# <form action="{{ path('wishlist_add', {'id': produit.id}) }}" method="post" style="display: inline;">
+							<button type="submit" class="add-to-wishlist">
 								<i class="fa fa-heart-o"></i>
-								ajouter à la liste de souhaits</a>
-						</li>
-						<li>
-							<a href="#">
-								<i class="fa fa-exchange"></i>
-								ajouter pour comparer</a>
-						</li>
+								<span class="tooltipp">Ajouter à la liste de souhaits</span>
+							</button>
+						</form> #}
+						
 					</ul>
 				</div>
 			</div>
@@ -172,7 +182,6 @@
 							</div>
 						</div>
 						<!-- /Note -->
-
 						<!-- Avis -->
 						<div class="col-md-6">
 							<div id="reviews">

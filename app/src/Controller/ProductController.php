@@ -51,12 +51,25 @@ class ProductController extends AbstractController
         
         $averageRating = count($avis) > 0 ? round($totalNotes / count($avis), 1) : 0;
 
-        // Rendre la vue avec le produit, sa note moyenne, sa quantité totale en stock et les produits associés
+        // Récupérer le panier de l'utilisateur actuel
+        $panier = $this->getPanier();
+
+        // Rendre la vue avec le produit, sa note moyenne, sa quantité totale en stock, les produits associés et le panier
         return $this->render('product/index.html.twig', [
             'product' => $productDetails,
             'averageRating' => $averageRating,
             'totalStockQuantity' => $totalStockQuantity,
             'associatedProducts' => $associatedProducts,
+            'panier' => $panier,
         ]);
+    }
+
+    private function getPanier()
+    {
+        // Fonction pour récupérer le panier de l'utilisateur actuel
+        if ($user = $this->getUser()) {
+            return method_exists($user, 'getPaniers') ? $user->getPaniers()->last() : null;
+        }
+        return null;
     }
 }

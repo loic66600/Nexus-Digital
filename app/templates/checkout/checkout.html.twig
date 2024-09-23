@@ -13,7 +13,7 @@
                     <!-- Détails de facturation -->
                     <div class="billing-details">
                         <div class="section-title">
-                            <h3 class="title">Adresse de facturation</h3>
+                            <h3 class="title">Recapitulatif de facturation</h3>
                         </div>
                         <div class="form-group">
                             <input class="input" type="text" name="first-name" placeholder="Prénom">
@@ -103,88 +103,92 @@
                     <!-- /Notes de commande -->
                 </div>
 
-                <!-- Détails de la commande -->
-                <div class="col-md-5 order-details">
-                    <div class="section-title text-center">
-                        <h3 class="title">Votre commande</h3>
-                    </div>
-                    <div class="order-summary">
-                        <div class="order-col">
-                            <div>
-                                <strong>PRODUIT</strong>
-                            </div>
-                            <div>
-                                <strong>TOTAL</strong>
-                            </div>
-                        </div>
-                        <div class="order-products">
-                            <div class="order-col">
-                                <div>1x Nom du produit ici</div>
-                                <div>980,00 $</div>
-                            </div>
-                            <div class="order-col">
-                                <div>2x Nom du produit ici</div>
-                                <div>980,00 $</div>
-                            </div>
-                        </div>
-                        <div class="order-col">
-                            <div>Livraison</div>
-                            <div>
-                                <strong>GRATUIT</strong>
-                            </div>
-                        </div>
-                        <div class="order-col">
-                            <div>
-                                <strong>TOTAL</strong>
-                            </div>
-                            <div>
-                                <strong class="order-total">2940,00 $</strong>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="payment-method">
-                        <div class="input-radio">
-                            <input type="radio" name="payment" id="payment-1">
-                            <label for="payment-1">
-                                <span></span>
-                                Virement bancaire direct
-                            </label>
-                            <div class="caption">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                        <div class="input-radio">
-                            <input type="radio" name="payment" id="payment-2">
-                            <label for="payment-2">
-                                <span></span>
-                                Paiement par chèque
-                            </label>
-                            <div class="caption">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                        <div class="input-radio">
-                            <input type="radio" name="payment" id="payment-3">
-                            <label for="payment-3">
-                                <span></span>
-                                Système Paypal
-                            </label>
-                            <div class="caption">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="input-checkbox">
-                        <input type="checkbox" id="terms">
-                        <label for="terms">
-                            <span></span>
-                            J'ai lu et j'accepte les
-                            <a href="#">termes et conditions</a>
-                        </label>
-                    </div>
-                    <a href="#" class="primary-btn order-submit">Passer la commande</a>
+               <!-- Détails de la commande -->
+<div class="col-md-5 order-details">
+    <div class="section-title text-center">
+        <h3 class="title">Votre commande</h3>
+    </div>
+    <div class="order-summary">
+        <div class="order-col">
+            <div>
+                <strong>PRODUIT</strong>
+            </div>
+            <div>
+                <strong>TOTAL</strong>
+            </div>
+        </div>
+        <div class="order-products">
+            {% for produit in produits %}
+                <div class="order-col">
+                    <div>{{ produit.quantite }}x {{ produit.nom }}</div>
+                    <div>{{ produit.montant }} €</div>
                 </div>
-                <!-- /Détails de la commande -->
+            {% endfor %}
+        </div>
+        <div class="order-col">
+            <div>Livraison</div>
+            <div>
+                <strong>GRATUIT</strong>
+            </div>
+        </div>
+        <div class="order-col">
+            <div>
+                <strong>TOTAL</strong>
+            </div>
+            <div>
+                <strong class="order-total">{{ montantTotal }} €</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Options de paiement -->
+    <div class="payment-method">
+        <div class="input-radio">
+            <input type="radio" name="payment" id="payment-1" checked>
+            <label for="payment-1">
+                <span></span>
+                Virement bancaire direct
+            </label>
+            <div class="caption">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+        </div>
+        <div class="input-radio">
+            <input type="radio" name="payment" id="payment-2">
+            <label for="payment-2">
+                <span></span>
+                Paiement par chèque
+            </label>
+            <div class="caption">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+        </div>
+        <div class="input-radio">
+            <input type="radio" name="payment" id="payment-3">
+            <label for="payment-3">
+                <span></span>
+                Système Paypal
+            </label>
+            <div class="caption">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conditions générales -->
+    <div class="input-checkbox">
+        <input type="checkbox" id="terms" required>
+        <label for="terms">
+            <span></span> J'ai lu et j'accepte les
+            <a href="#">termes et conditions</a>.
+        </label>
+    </div>
+
+    <!-- Bouton de soumission de la commande -->
+    <a href="#" class="primary-btn order-submit">Passer la commande</a>
+
+</div>
+<!-- /Détails de la commande -->
             </div>
             <!-- /ligne -->
         </div>

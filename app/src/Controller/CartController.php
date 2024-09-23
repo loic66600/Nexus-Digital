@@ -20,14 +20,19 @@ class CartController extends AbstractController
         // Vérifier si l'utilisateur est authentifié
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Récupérer le panier de l'utilisateur actuel
-        $panier = $this->getUser()->getPaniers()->last();
+        // Récupérer le panier et la wishlist de l'utilisateur actuel
+        $panier = null;
+        $wishlist = null;
+        if ($this->getUser()) {
+            $panier = $this->getUser()->getPaniers()->last();
+            $wishlist = method_exists($this->getUser(), 'getWishlist') ? $this->getUser()->getWishlist() : null;
+        }
 
         return $this->render('cart/index.html.twig', [
             'panier' => $panier,
+            'wishlist' => $wishlist,
         ]);
     }
-
     #[Route('/cart/add/{id}', name: 'cart_add', methods: ['POST'])]
     public function add(Produits $produit, EntityManagerInterface $entityManager, Request $request): Response
     {
@@ -36,14 +41,19 @@ class CartController extends AbstractController
 
         // Récupérer ou créer un nouveau panier pour l'utilisateur actuel
         $user = $this->getUser();
-        $panier = $user->getPaniers()->last();
+        $panier = null;
         
+        if ($user && $user->getPaniers()) {
+            $panier = $user->getPaniers()->last();
+        }
+
         if (!$panier) {
             $panier = new Panier();
             $panier->setClient($user);
             $panier->setNumCommande(uniqid('cmd_', true));
             $panier->setOrderDate(new \DateTime());
 
+            // Vérifier et définir le statut par défaut
             $defaultStatus = $entityManager->getRepository(Status::class)->findOneBy(['label' => 'Pending']);
             if (!$defaultStatus) {
                 throw new \Exception('Default status not found.');

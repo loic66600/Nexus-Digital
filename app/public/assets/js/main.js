@@ -162,7 +162,7 @@
     //             console.log('Category selected:', category);
     
     //             // Redirige vers la page avec la catégorie sélectionnée
-    //             window.location.href = '/' + encodeURIComponent(category); 
+    //             window.location.href = '/' + encodeURIComponent(category);
     //         } else {
     //             console.error('Invalid href:', hrefValue);
     //         }
@@ -212,6 +212,17 @@
 //               priceInputMin.value = value; 
 //            }
 //        });
-//    }
+    //    }
+    document.addEventListener("DOMContentLoaded", function() {
+        setTimeout(function() {
+            var alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.classList.add('hide');
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500); // Correspond à la durée de la transition CSS
+            });
+        }, 5000); // 5000 ms = 5 seconds
+    });
 
 })(jQuery);

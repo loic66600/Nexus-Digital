@@ -24,11 +24,14 @@ class CategoriesController extends AbstractController
     {
         // Récupérer toutes les catégories
         $categories = $this->categorieRepository->findAll();
-        // dd($categories);
+
+        // Récupérer le panier de l'utilisateur actuel
+        $panier = $this->getPanier();
 
         return $this->render('categories/index.html.twig', [
             'categories' => $categories,
-            'menuCategories' => $categories
+            'menuCategories' => $categories,
+            'panier' => $panier, // Passer le panier au template
         ]);
     }
 
@@ -37,17 +40,27 @@ class CategoriesController extends AbstractController
     {
         // Récupérer la catégorie par ID
         $category = $this->categorieRepository->findOneByIdWithProducts($id);
-       
 
         if (!$category) {
             throw $this->createNotFoundException('No category found for id ' . $id);
-
         }
-        $cat[] =$category;
+
+        // Récupérer le panier de l'utilisateur actuel
+        $panier = $this->getPanier();
 
         return $this->render('categories/index.html.twig', [
-            'categories' => $cat,
+            'categories' => [$category],
             'menuCategories' => $this->categorieRepository->findAll(), // Pour le menu de navigation
+            'panier' => $panier, // Passer le panier au template
         ]);
+    }
+
+    private function getPanier()
+    {
+        // Fonction pour récupérer le panier de l'utilisateur actuel
+        if ($user = $this->getUser()) {
+            return method_exists($user, 'getPaniers') ? $user->getPaniers()->last() : null;
+        }
+        return null;
     }
 }
