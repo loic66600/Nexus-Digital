@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Compte{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Mon Compte</h1>
+    <p>Bienvenue, {{ user.firstName }} {{ user.lastName }}</p>
+    <ul>
+        <li>Email: {{ user.email }}</li>
+        {% if user.phone %}
+            <li>Téléphone: {{ user.phone }}</li>
+        {% endif %}
+        
+        <!-- Afficher les adresses -->
+        <h3>Adresses</h3>
+        {% if userAddresses is not empty %}
+            <ul>
+                {% for address in userAddresses %}
+                    <li>{{ address.addressName }}: {{ address.address }}, {{ address.city }}, {{ address.zipCode }}, {{ address.country }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucune adresse enregistrée.</p>
+        {% endif %}
+        
+        <li>Articles dans la liste de souhaits : {{ wishlistCount }}</li>
+    </ul>
+
+    <!-- Afficher les détails du panier -->
+    {% if panier %}
+        <h3>Votre Panier</h3>
+        <ul>
+            {% for lignePanier in panier.lignePaniers %}
+                <li>{{ lignePanier.product.name }} - {{ lignePanier.quantity }} x {{ lignePanier.product.prices }} €</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Votre panier est vide.</p>
+    {% endif %}
+    
+</div>
+{% endblock %}

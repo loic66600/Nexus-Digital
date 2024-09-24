@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ProduitsRepository;
 use App\Repository\CategorieRepository;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,7 @@ class HomeController extends AbstractController
     }
 
     #[Route('/', name: 'home_index', defaults: ['category' => null])]
-    public function index(?string $category): Response
+    public function index(?string $category, Request $request): Response
     {
         if ($category) {
             // Remplacez les tirets bas par des espaces pour correspondre aux noms dans la base de données
@@ -37,16 +38,22 @@ class HomeController extends AbstractController
         // Récupérer le panier de l'utilisateur actuel
         $panier = $this->getPanier();
 
+        // Récupérer le nombre d'articles dans la wishlist à partir de la session
+        $session = $request->getSession();
+        $wishlistIds = $session->get('wishlist', []);
+        $wishlistCount = count($wishlistIds);
+
         return $this->render('home/index.html.twig', [
             'produits' => $produits,
             'selectedCategory' => $category,
             'categories' => $categories,
             'panier' => $panier,
+            'wishlistCount' => $wishlistCount,
         ]);
     }
 
     #[Route('/home-categorie/{id}', name: 'app_home_category')]
-    public function category(int $id): Response
+    public function category(int $id, Request $request): Response
     {
         // Récupérer la catégorie sélectionnée
         $category = $this->categorieRepository->findOneById($id);
@@ -63,11 +70,17 @@ class HomeController extends AbstractController
         // Récupérer le panier de l'utilisateur actuel
         $panier = $this->getPanier();
 
+        // Récupérer le nombre d'articles dans la wishlist à partir de la session
+        $session = $request->getSession();
+        $wishlistIds = $session->get('wishlist', []);
+        $wishlistCount = count($wishlistIds);
+
         return $this->render('home/index.html.twig', [
             'produits' => $produits,
             'selectedCategory' => $category->getName(),
             'categories' => $categories,
             'panier' => $panier,
+            'wishlistCount' => $wishlistCount,
         ]);
     }
 

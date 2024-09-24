@@ -54,10 +54,13 @@
                                 {% endfor %}
                             </div>
                             <div class="product-btns">
-                                <button class="add-to-wishlist">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span class="tooltipp">ajouter à la liste de souhaits</span>
-                                </button>
+                                <!-- Formulaire pour ajouter à la wishlist -->
+                                <form action="{{ path('wishlist_add', {'id': associatedProduct.id}) }}" method="post" style="display: inline;">
+                                    <button type="submit" class="add-to-wishlist">
+                                        <i class="fa fa-heart-o"></i>
+                                        <span class="tooltipp">ajouter à la liste de souhaits</span>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                         <!-- Formulaire d'ajout au panier -->

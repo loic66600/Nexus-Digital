@@ -48,10 +48,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'client')]
     private Collection $paniers;
 
+    /**
+     * @var Collection<int, UserInfo>
+     */
+    #[ORM\OneToMany(targetEntity: UserInfo::class, mappedBy: 'user')]
+    private Collection $userAdresse;
+
     public function __construct()
     {
         $this->avis = new ArrayCollection();
         $this->paniers = new ArrayCollection();
+        $this->userAdresse = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -191,6 +198,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($panier->getClient() === $this) {
                 $panier->setClient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserInfo>
+     */
+    public function getUserAdresse(): Collection
+    {
+        return $this->userAdresse;
+    }
+
+    public function addUserAdresse(UserInfo $userAdresse): static
+    {
+        if (!$this->userAdresse->contains($userAdresse)) {
+            $this->userAdresse->add($userAdresse);
+            $userAdresse->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAdresse(UserInfo $userAdresse): static
+    {
+        if ($this->userAdresse->removeElement($userAdresse)) {
+            // set the owning side to null (unless already changed)
+            if ($userAdresse->getUser() === $this) {
+                $userAdresse->setUser(null);
             }
         }
 

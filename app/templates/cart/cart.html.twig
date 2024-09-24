@@ -62,8 +62,8 @@
 				<!-- Bouton Passer la Commande -->
 				{% if panier and panier.lignePaniers|length > 0 %}
 					<div class="row mt-4">
-						<div class="col-md-12 text-right">
-							<a href="{{ path('app_checkout') }}" class="btn btn-primary btn-lg">Passer la commande</a>
+						<div class="col-md-12">
+							<a href="{{ path('app_checkout') }}" id="button-commander" class="btn btn-primary btn-lg">Passer la commande</a>
 						</div>
 					</div>
 				{% endif %}
@@ -73,7 +73,10 @@
 
 			<!-- Wishlist Section -->
 			<div class="col-md-12 mt-5">
-				<h3>Votre Liste de Souhaits</h3>
+				<h3>Votre Liste de Souhaits
+					<i class="fa fa-heart-o"></i>
+				</h3>
+
 				{% if wishlist and wishlist|length > 0 %}
 					<div class="products-slick" data-nav="#slick-nav-1">
 						{% for produit in wishlist %}
@@ -84,9 +87,6 @@
 									{% else %}
 										<img src="/assets/img/product01.png" alt="{{ produit.name }}">
 									{% endif %}
-									<div class="product-label">
-										<span class="new">NEW</span>
-									</div>
 								</div>
 								<div class="product-body">
 									<p class="product-category">
@@ -108,25 +108,28 @@
 										<i class="fa fa-star"></i>
 										<i class="fa fa-star"></i>
 									</div>
+									<!-- Formulaire pour ajouter à la wishlist -->
 									<div
 										class="product-btns">
 										<!-- Formulaire pour ajouter à la wishlist -->
 										<form action="{{ path('wishlist_add', {'id': produit.id}) }}" method="post" style="display: inline;">
 											<button type="submit" class="add-to-wishlist">
 												<i class="fa fa-heart-o"></i>
-												<span class="tooltipp">ajouter à la liste de souhaits</span>
+												<span class="tooltipp">ajouter au panier</span>
+											</button>
+										</form>
+
+										<!-- Espace entre les boutons -->
+										<span style="display: inline-block; width: 10px;"></span>
+
+										<!-- Formulaire pour supprimer de la wishlist -->
+										<form action="{{ path('wishlist_remove', {'id': produit.id}) }}" method="post" style="display: inline;">
+											<button type="submit" class="remove-from-wishlist btn btn-danger">
+												<i class="fa fa-trash-o"></i>
+												Retirer
 											</button>
 										</form>
 									</div>
-								</div>
-								<!-- Formulaire pour ajouter au panier -->
-								<div class="add-to-cart">
-									<form action="{{ path('cart_add', {'id': produit.id}) }}" method="post" style="display: inline;">
-										<button type="submit" class="add-to-cart-btn btn btn-success">
-											<i class="fa fa-shopping-cart"></i>
-											Ajouter au panier
-										</button>
-									</form>
 								</div>
 							</div>
 						{% endfor %}

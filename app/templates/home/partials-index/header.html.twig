@@ -27,16 +27,16 @@
 				<ul class="header-links pull-right">
 					<li>
 						<a href="/user/new">
-							<i ></i>
+							<i></i>
 							S'inscrire</a>
 					</li>
 					<li>
 						<a href="/login">
-							<i ></i>
+							<i></i>
 							Connexion</a>
 					</li>
 					<li>
-						<a href="#">
+						<a href="/account">
 							<i class="fa fa-user-o"></i>
 							Mon Compte</a>
 					</li>
@@ -90,62 +90,75 @@
 							class="header-ctn">
 							<!-- Liste de souhaits -->
 							<div>
-								<a href="#">
+								<a href="{{ path('app_cart') }}">
 									<i class="fa fa-heart-o"></i>
 									<span>Votre Liste</span>
-									<div class="qty">2</div>
+									<div class="qty">{{ wishlistCount }}</div>
 								</a>
 							</div>
 							<!-- /Liste de souhaits -->
 
-<!-- Panier -->
-<div class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-        <i class="fa fa-shopping-cart"></i>
-        <span>Votre Panier</span>
-        <div class="qty">{{ panier.lignePaniers|length }}</div>
-    </a>
-    <div class="cart-dropdown">
-        <div class="cart-list">
-            {% set overall_total = 0 %}
-            {% for lignePanier in panier.lignePaniers %}
-                {% set subtotal = lignePanier.product.prices * lignePanier.quantity %}
-                {% set overall_total = overall_total + subtotal %}
-                <div class="product-widget">
-                    <div class="product-img">
-                        {% if lignePanier.product.images|length > 0 %}
-                            <img src="{{ asset('assets/img/' ~ lignePanier.product.images[0].name) }}" alt="{{ lignePanier.product.name }}">
-                        {% else %}
-                            <img src="/assets/img/product01.png" alt="{{ lignePanier.product.name }}">
-                        {% endif %}
-                    </div>
-                    <div class="product-body">
-                        <h3 class="product-name">
-                            <a href="#">{{ lignePanier.product.name }}</a>
-                        </h3>
-                        <h4 class="product-price">
-                            <span class="qty">{{ lignePanier.quantity }}x</span>{{ lignePanier.product.prices }}€
-                        </h4>
-                    </div>
-                    <form action="{{ path('cart_remove', {'id': lignePanier.id}) }}" method="post" style="display: inline;">
-                        <button type="submit" class="delete"><i class="fa fa-close"></i></button>
-                    </form>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="cart-summary">
-            <small>{{ panier.lignePaniers|length }} Article(s) sélectionné(s)</small>
-            <h5>SOUS-TOTAL: {{ overall_total }}€</h5>
-        </div>
-        <div class="cart-btns">
-            <a href="{{ path('app_cart') }}">Voir Panier</a>
-            <a href="{{ path('app_checkout') }}">Commander
-                <i class="fa fa-arrow-circle-right"></i>
-            </a>
-        </div>
-    </div>
-</div>
-<!-- /Panier -->
+							<!-- Panier -->
+							<div class="dropdown">
+								<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+									<i class="fa fa-shopping-cart"></i>
+									<span>Votre Panier</span>
+									{% if panier %}
+										<div class="qty">{{ panier.lignePaniers|length }}</div>
+									{% else %}
+										<div class="qty">0</div>
+									{% endif %}
+								</a>
+								<div class="cart-dropdown">
+									{% if panier and panier.lignePaniers|length > 0 %}
+										<div class="cart-list">
+											{% set overall_total = 0 %}
+											{% for lignePanier in panier.lignePaniers %}
+												{% set subtotal = lignePanier.product.prices * lignePanier.quantity %}
+												{% set overall_total = overall_total + subtotal %}
+												<div class="product-widget">
+													<div class="product-img">
+														{% if lignePanier.product.images|length > 0 %}
+															<img src="{{ asset('assets/img/' ~ lignePanier.product.images[0].name) }}" alt="{{ lignePanier.product.name }}">
+														{% else %}
+															<img src="/assets/img/product01.png" alt="{{ lignePanier.product.name }}">
+														{% endif %}
+													</div>
+													<div class="product-body">
+														<h3 class="product-name">
+															<a href="#">{{ lignePanier.product.name }}</a>
+														</h3>
+														<h4 class="product-price">
+															<span class="qty">{{ lignePanier.quantity }}x</span>
+															{{ lignePanier.product.prices }}€
+														</h4>
+													</div>
+													<form action="{{ path('cart_remove', {'id': lignePanier.id}) }}" method="post" style="display: inline;">
+														<button type="submit" class="delete">
+															<i class="fa fa-close"></i>
+														</button>
+													</form>
+												</div>
+											{% endfor %}
+										</div>
+										<div class="cart-summary">
+											<small>{{ panier.lignePaniers|length }}
+												Article(s) sélectionné(s)</small>
+											<h5>SOUS-TOTAL:
+												{{ overall_total }}€</h5>
+										</div>
+									{% else %}
+										<p>Votre panier est vide.</p>
+									{% endif %}
+									<div class="cart-btns">
+										<a href="{{ path('app_cart') }}">Voir Panier</a>
+										<a href="{{ path('app_checkout') }}">Commander
+											<i class="fa fa-arrow-circle-right"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+							<!-- /Panier -->
 							<!-- Bascule Menu -->
 							<div class="menu-toggle">
 								<a href="#">

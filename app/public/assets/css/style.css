@@ -1044,7 +1044,7 @@ textarea.input {
   position: relative;
   border: 2px solid transparent;
   height: 40px;
-  padding: 0 30px;
+  padding: 0 20px;
   background-color: #ef233c;
   color: #FFF;
   text-transform: uppercase;
@@ -2140,6 +2140,14 @@ textarea.input {
 .fade-out.hide {
   opacity: 0;
 }
+#button-commander {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 14px; /* Réduit la taille de la police */
+  padding: 8px 16px; /* Ajuste le padding pour réduire la taille globale */
+  width: fit-content; /* Ajuste automatiquement la largeur en fonction du contenu */
+}
 
 /*=========================================================
 	13 -> user
@@ -2153,7 +2161,19 @@ textarea.input {
 	14 -> RESPONSIVE
 ===========================================================*/
 
-@media only screen and (max-width: 1201px) {}
+@media only screen and (min-width: 1201px) {
+
+  .product .add-to-cart .add-to-cart-btn {
+    padding: 0px;
+  }
+  .product .add-to-cart .add-to-cart-btn:hover {
+    background-color: #FFF;
+    color: #D10024;
+    border-color: #D10024;
+    padding: 0px 5px 0px 30px;
+  }
+  
+}
 
 @media only screen and (max-width: 991px) {
   #top-header .header-links.pull-left {
@@ -2181,6 +2201,10 @@ textarea.input {
     margin-top: 30px;
     margin-bottom: 30px;
   }
+  .body{
+    font-size:larger
+  }
+  
 }
 
 @media only screen and (max-width: 767px) {

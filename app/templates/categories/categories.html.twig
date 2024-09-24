@@ -1,92 +1,93 @@
 <!-- BREADCRUMB -->
 <div id="breadcrumb" class="section">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<h3 class="breadcrumb-header">Categories</h3>
-				<ul class="breadcrumb-tree section-tab-nav">
-					<li>
-						<a href="/">Home</a>
-					</li>
-					{% for category in menuCategories %}
-						<li>
-							<a href="{{ path('category_show', {'id': category.id}) }}">{{ category.name }}</a>
-						</li>
-					{% endfor %}
-				</ul>
-			</div>
-		</div>
-	</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="breadcrumb-header">Categories</h3>
+                <ul class="breadcrumb-tree section-tab-nav">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    {% for category in menuCategories %}
+                        <li>
+                            <a href="{{ path('category_show', {'id': category.id}) }}">{{ category.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Messages Flash -->
 {% for label, messages in app.flashes %}
-	<div class="col-md-12">
-		<div class="alert alert-{{ label }} fade-out">
-			{% for message in messages %}
-				<p>{{ message }}</p>
-			{% endfor %}
-		</div>
-	</div>
+    <div class="col-md-12">
+        <div class="alert alert-{{ label }} fade-out">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    </div>
 {% endfor %}
 <!-- /Messages Flash -->
 <!-- SECTION -->
 <div class="section">
-	<div class="container">
-		<div class="row">
-			{% for category in categories %}
-				<div id="{{ category.name }}" class="col-md-12">
-					<h4>{{ category.name }}</h4>
-					<div class="row">
-						{% for produit in category.produits %}
-							<!-- product -->
-							<div class="col-md-3 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										{% if produit.images|length > 0 %}
-											<img src="{{ asset('assets/img/' ~ produit.images[0].name) }}" alt="{{ produit.name }}">
-										{% else %}
-											<img src="/assets/img/product01.png" alt="Default Image">
-										{% endif %}
-									</div>
-									<div class="product-body">
-										<p class="product-category">{{ category.name }}</p>
-										<h3 class="product-name">
-											<a href="{{ path('product_show', {'id': produit.id}) }}">{{ produit.name }}</a>
-										</h3>
-										<h4 class="product-price">{{ produit.prices }}
-											€</h4>
-										<div class="product-rating">
-											{% for i in 1..5 %}
-												<i class="fa fa-star"></i>
-											{% endfor %}
-										</div>
-										<div class="product-btns">
-										<div class="product-btns">
-										<button class="add-to-wishlist">
-											<i class="fa fa-heart-o"></i>
-											<span class="tooltipp">ajouter à la liste de souhaits</span>
-										</button>
-									</div>
-						
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<form action="{{ path('cart_add', {'id': produit.id}) }}" method="post" style="display: inline;">
-											<button type="submit" class="add-to-cart-btn btn btn-success">
-												<i class="fa fa-shopping-cart"></i>
-												Ajouter au panier
-											</button>
-										</form>
-									</div>
-								</div>
-							</div>
-							<!-- /product -->
-						{% else %}
-							<p>Aucun produit trouvé dans cette catégorie.</p>
-						{% endfor %}
-					</div>
-				</div>
-			{% endfor %}
-		</div>
-	</div>
+    <div class="container">
+        <div class="row">
+            {% for category in categories %}
+                <div id="{{ category.name }}" class="col-md-12">
+                    <h4>{{ category.name }}</h4>
+                    <div class="row">
+                        {% for produit in category.produits %}
+                            <!-- product -->
+                            <div class="col-md-3 col-xs-6">
+                                <div class="product">
+                                    <div class="product-img">
+                                        {% if produit.images|length > 0 %}
+                                            <img src="{{ asset('assets/img/' ~ produit.images[0].name) }}" alt="{{ produit.name }}">
+                                        {% else %}
+                                            <img src="/assets/img/product01.png" alt="Default Image">
+                                        {% endif %}
+                                    </div>
+                                    <div class="product-body">
+                                        <p class="product-category">{{ category.name }}</p>
+                                        <h3 class="product-name">
+                                            <a href="{{ path('product_show', {'id': produit.id}) }}">{{ produit.name }}</a>
+                                        </h3>
+                                        <h4 class="product-price">{{ produit.prices }} €</h4>
+                                        <div class="product-rating">
+                                            {% for i in 1..5 %}
+                                                <i class="fa fa-star"></i>
+                                            {% endfor %}
+                                        </div>
+
+                                        <!-- Formulaire pour ajouter à la wishlist -->
+                                        <div class="product-btns">
+                                            <form action="{{ path('wishlist_add', {'id': produit.id}) }}" method="post" style="display: inline;">
+                                                <button type="submit" class="add-to-wishlist">
+                                                    <i class="fa fa-heart-o"></i>
+                                                    <span class="tooltipp">ajouter à la liste de souhaits</span>
+                                                </button>
+                                            </form>
+                                        </div>
+
+                                    </div>
+                                    <!-- Formulaire d'ajout au panier -->
+                                    <div class="add-to-cart">
+                                        <form action="{{ path('cart_add', {'id': produit.id}) }}" method="post" style="display: inline;">
+                                            <button type="submit" class="add-to-cart-btn btn btn-success">
+                                                <i class="fa fa-shopping-cart"></i> Ajouter au panier
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /product -->
+                        {% else %}
+                            <p>Aucun produit trouvé dans cette catégorie.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>

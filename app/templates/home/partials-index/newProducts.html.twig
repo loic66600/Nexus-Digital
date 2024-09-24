@@ -76,14 +76,14 @@
 												<i class="fa fa-star"></i>
 											</div>
 											<div class="product-btns">
-											<form action="{{ path('wishlist_add', {'id': produit.id}) }}" method="post" style="display: inline;">
-												<button type="submit" class="add-to-wishlist">
-													<i class="fa fa-heart-o"></i>
-													<span class="tooltipp">ajouter à la liste de souhaits</span>
-												</button>
-											</form>
-										</div>
-										
+												<form action="{{ path('wishlist_add', {'id': produit.id}) }}" method="post" style="display: inline;">
+													<button type="submit" class="add-to-wishlist">
+														<i class="fa fa-heart-o"></i>
+														<span class="tooltipp">ajouter à la liste de souhaits</span>
+													</button>
+												</form>
+											</div>
+
 										</div>
 										<div class="add-to-cart">
 											<form action="{{ path('cart_add', {'id': produit.id}) }}" method="post" style="display: inline;">

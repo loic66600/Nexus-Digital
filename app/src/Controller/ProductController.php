@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ProduitsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,7 +18,7 @@ class ProductController extends AbstractController
     }
 
     #[Route('/product/{id}', name: 'product_show')]
-    public function show(int $id): Response
+    public function show(int $id, Request $request): Response
     {
         // Récupérer les détails du produit par son ID
         $productDetails = $this->produitsRepository->findProductDetails($id);
@@ -54,13 +55,19 @@ class ProductController extends AbstractController
         // Récupérer le panier de l'utilisateur actuel
         $panier = $this->getPanier();
 
-        // Rendre la vue avec le produit, sa note moyenne, sa quantité totale en stock, les produits associés et le panier
+        // Récupérer le nombre d'articles dans la wishlist à partir de la session
+        $session = $request->getSession();
+        $wishlistIds = $session->get('wishlist', []);
+        $wishlistCount = count($wishlistIds);
+
+        // Rendre la vue avec toutes les données nécessaires
         return $this->render('product/index.html.twig', [
             'product' => $productDetails,
             'averageRating' => $averageRating,
             'totalStockQuantity' => $totalStockQuantity,
             'associatedProducts' => $associatedProducts,
             'panier' => $panier,
+            'wishlistCount' => $wishlistCount, // Utiliser la variable avec le $
         ]);
     }
 

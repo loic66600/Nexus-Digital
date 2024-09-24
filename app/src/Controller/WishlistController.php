@@ -33,6 +33,28 @@ class WishlistController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
 
+    #[Route('/wishlist/remove/{id}', name: 'wishlist_remove', methods: ['POST'])]
+    public function removeFromWishlist(Produits $produit, Request $request): Response
+    {
+        // Vérifier si l'utilisateur est authentifié
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        // Supprimer le produit de la session de wishlist
+        $session = $request->getSession();
+        $wishlist = $session->get('wishlist', []);
+
+        if (($key = array_search($produit->getId(), $wishlist)) !== false) {
+            unset($wishlist[$key]);
+            $session->set('wishlist', array_values($wishlist)); // Réindexer le tableau
+            $this->addFlash('success', 'Produit retiré de votre liste de souhaits.');
+        } else {
+            $this->addFlash('info', 'Produit non trouvé dans votre liste de souhaits.');
+        }
+
+        // Rediriger vers la page précédente
+        return $this->redirect($request->headers->get('referer'));
+    }
+
     #[Route('/wishlist', name: 'wishlist_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
