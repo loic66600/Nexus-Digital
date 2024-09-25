@@ -19,6 +19,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    /**
+     * @Assert\NotBlank(message="L'adresse e-mail est obligatoire.")
+     * @Assert\Email(message="Veuillez entrer une adresse e-mail valide.")
+     */
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
@@ -34,6 +38,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstName = null;
 
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
+     /**
+     * @Assert\Regex(
+     *     pattern="/^(0[1-9]{1})([0-9]{8})$/",
+     *     message="Le numéro de téléphone doit être un numéro valide à 10 chiffres."
+     * )
+     */
     private ?string $phone = null;
 
     /**

@@ -10,10 +10,16 @@
             {{ form_start(form, {'attr': {'class': 'border p-3 bg-light shadow-sm rounded'}}) }}
             
             <div class="form-group mb-2">
-                {{ form_label(form.email, null, {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.email) }}
-            </div>
+            {{ form_label(form.email, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.email, {
+                'attr': {
+                    'class': 'form-control',
+                    'pattern': '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$',  
+                    'title': 'Veuillez entrer une adresse e-mail valide.'
+                }
+            }) }}
+            {{ form_errors(form.email) }}
+        </div>
 
             <div class="form-group mb-2">
                 {{ form_label(form.password, null, {'label_attr': {'class': 'form-label'}}) }}
@@ -34,12 +40,16 @@
             </div>
 
             <div class="form-group mb-2">
-                {{ form_label(form.phone, null, {'label_attr': {'class': 'form-label'}}) }}
-                {{ form_widget(form.phone, {'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.phone) }}
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100 mt-3">Soumettre</button>
+            {{ form_label(form.phone, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(form.phone, {
+                'attr': {
+                    'class': 'form-control',
+                    'pattern': '^(0[1-9]{1})([0-9]{8})$',  
+                    'title': 'Veuillez entrer un numéro de téléphone valide à 10 chiffres.'
+                }
+            }) }}
+            {{ form_errors(form.phone) }}
+        </div>            <button type="submit" class="btn btn-primary w-100 mt-3">Soumettre</button>
             
             {{ form_end(form) }}
         </div>
