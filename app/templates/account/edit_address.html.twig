@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier l'adresse{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Modifier l'adresse</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="addressName">Nom de l'adresse</label>
+            <input type="text" id="addressName" name="addressName" value="{{ address.addressName }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Adresse</label>
+            <input type="text" id="address" name="address" value="{{ address.address }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="city">Ville</label>
+            <input type="text" id="city" name="city" value="{{ address.city }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="zipCode">Code Postal</label>
+            <input type="text" id="zipCode" name="zipCode" value="{{ address.zipCode }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="country">Pays</label>
+            <input type="text" id="country" name="country" value="{{ address.country }}" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
+    </form>
+</div>
+{% endblock %}

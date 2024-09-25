@@ -1523,3 +1523,33 @@
 2024/09/24 13:45:58 [notice] 1#1: start worker process 34
 2024/09/24 13:45:58 [notice] 1#1: start worker process 35
 2024/09/24 13:45:58 [notice] 1#1: start worker process 36
+2024/09/25 06:37:03 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:37:08 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:37:14 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:37:19 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:37:26 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:37:33 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:37:42 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:37:54 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:38:12 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:38:43 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:39:39 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:40:44 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:41:50 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:42:55 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:44:00 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:45:06 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/25 06:46:11 [notice] 1#1: using the "epoll" event method
+2024/09/25 06:46:11 [notice] 1#1: nginx/1.26.2
+2024/09/25 06:46:11 [notice] 1#1: built by gcc 13.2.1 20240309 (Alpine 13.2.1_git20240309) 
+2024/09/25 06:46:11 [notice] 1#1: OS: Linux 6.8.0-40-generic
+2024/09/25 06:46:11 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1024:524288
+2024/09/25 06:46:11 [notice] 1#1: start worker processes
+2024/09/25 06:46:11 [notice] 1#1: start worker process 29
+2024/09/25 06:46:11 [notice] 1#1: start worker process 30
+2024/09/25 06:46:11 [notice] 1#1: start worker process 31
+2024/09/25 06:46:11 [notice] 1#1: start worker process 32
+2024/09/25 06:46:11 [notice] 1#1: start worker process 33
+2024/09/25 06:46:11 [notice] 1#1: start worker process 34
+2024/09/25 06:46:11 [notice] 1#1: start worker process 35
+2024/09/25 06:46:11 [notice] 1#1: start worker process 36

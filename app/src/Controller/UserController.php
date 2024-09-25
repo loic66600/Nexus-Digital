@@ -4,13 +4,14 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Entity\UserInfo;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/user')]
 final class UserController extends AbstractController
@@ -87,4 +88,45 @@ final class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
-}
+    #[Route('/{id}/address/{addressId}/edit', name: 'app_user_address_edit', methods: ['GET', 'POST'])]
+    public function editAddress(Request $request, EntityManagerInterface $entityManager, User $user, int $addressId): Response
+    {
+        $address = $entityManager->getRepository(UserInfo::class)->find($addressId);
+
+        if (!$address || $address->getUser() !== $user) {
+            throw $this->createNotFoundException('Adresse non trouvée ou non autorisée.');
+        }
+
+        if ($request->isMethod('POST')) {
+            $address->setAddressName($request->request->get('addressName'));
+            $address->setAddress($request->request->get('address'));
+            $address->setCity($request->request->get('city'));
+            $address->setZipCode($request->request->get('zipCode'));
+            $address->setCountry($request->request->get('country'));
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
+        }
+
+        return $this->render('account/edit_address.html.twig', [
+            'user' => $user,
+            'address' => $address,
+        ]);
+    }
+
+    #[Route('/{id}/address/{addressId}/delete', name: 'app_user_address_delete', methods: ['POST'])]
+    public function deleteAddress(Request $request, EntityManagerInterface $entityManager, User $user, int $addressId): Response
+    {
+        $address = $entityManager->getRepository(UserInfo::class)->find($addressId);
+
+        if ($address && $this->isCsrfTokenValid('delete'.$addressId, $request->request->get('_token'))) {
+            if ($address->getUser() === $user) {
+                $entityManager->remove($address);
+                $entityManager->flush();
+            }
+        }
+
+        return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
+    }}
+

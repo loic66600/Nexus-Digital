@@ -2,42 +2,93 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\User;
+use App\Entity\UserInfo;
+use App\Form\UserType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AccountController extends AbstractController
 {
     #[Route('/account', name: 'app_account')]
     public function index(Request $request): Response
     {
-        // Vérifier si l'utilisateur est authentifié
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Récupérer l'utilisateur actuel
         $user = $this->getUser();
-
-        // Récupérer le panier de l'utilisateur actuel
         $panier = $this->getPanier();
 
-        // Récupérer le nombre d'articles dans la wishlist à partir de la session
         $session = $request->getSession();
         $wishlistIds = $session->get('wishlist', []);
         $wishlistCount = count($wishlistIds);
 
-        // Rendre la vue avec les informations de l'utilisateur, le panier et le nombre d'articles dans la wishlist
         return $this->render('account/index.html.twig', [
             'user' => $user,
-            'userAddresses' => $user->getUserAdresse(),
             'panier' => $panier,
             'wishlistCount' => $wishlistCount,
         ]);
     }
 
+    #[Route('/account/edit', name: 'app_account_edit')]
+    public function edit(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('app_account');
+        }
+
+        return $this->render('account/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/account/address/{id}/edit', name: 'app_account_address_edit')]
+    public function editAddress(Request $request, EntityManagerInterface $entityManager, UserInfo $address): Response
+    {
+        if ($address->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cette adresse.');
+        }
+
+        if ($request->isMethod('POST')) {
+            // Mettre à jour les informations de l'adresse
+            $address->setAddressName($request->request->get('addressName'));
+            $address->setAddress($request->request->get('address'));
+            $address->setCity($request->request->get('city'));
+            $address->setZipCode($request->request->get('zipCode'));
+            $address->setCountry($request->request->get('country'));
+
+            // Enregistrer les modifications
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_account');
+        }
+
+        return $this->render('account/edit_address.html.twig', [
+            'address' => $address,
+        ]);
+    }
+
+    #[Route('/account/address/{id}/delete', name: 'app_account_address_delete')]
+    public function deleteAddress(EntityManagerInterface $entityManager, UserInfo $address): Response
+    {
+        if ($address && $address->getUser() === $this->getUser()) {
+            // Supprimer l'adresse
+            $entityManager->remove($address);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_account');
+    }
+
     private function getPanier()
     {
-        // Fonction pour récupérer le panier de l'utilisateur actuel
         if ($user = $this->getUser()) {
             return method_exists($user, 'getPaniers') ? $user->getPaniers()->last() : null;
         }
