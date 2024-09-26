@@ -141,78 +141,23 @@
         });
     }
 
-    // function updatePriceSlider(elem , value) {
-    //     if ( elem.hasClass('price-min') ) {
-    //         console.log('min');
-    //         priceSlider.noUiSlider.set([value, null]);
-    //     } else if ( elem.hasClass('price-max')) {
-    //         console.log('max');
-    //         priceSlider.noUiSlider.set([null, value]);
-    //     }
-    // }
 
-    // $(document).ready(function() {
-    //     $('.section-tab-nav a').on('click', function(event) {
-    //         event.preventDefault(); // Empêche le comportement par défaut du lien
+    document.addEventListener('DOMContentLoaded', function() {
+        var toggleButton = document.getElementById('toggleUserForm');
+        var formContainer = document.getElementById('userFormContainer');
     
-    //         var hrefValue = $(this).attr('href');
-            
-    //         if (hrefValue.startsWith('/')) {
-    //             var category = hrefValue.substring(1); // Enlève la barre oblique initiale
-    //             console.log('Category selected:', category);
+        toggleButton.addEventListener('click', function() {
+            if (formContainer.style.display === 'none') {
+                formContainer.style.display = 'block';
+                toggleButton.textContent = 'Masquer le formulaire';
+            } else {
+                formContainer.style.display = 'none';
+                toggleButton.textContent = 'Modifier les informations';
+            }
+        });
+    });
     
-    //             // Redirige vers la page avec la catégorie sélectionnée
-    //             window.location.href = '/' + encodeURIComponent(category);
-    //         } else {
-    //             console.error('Invalid href:', hrefValue);
-    //         }
-    //     });
-    // });
 
-    // $(document).ready(function() {
-    //     $('.section-tab-nav a').on('click', function(event) {
-    //         event.preventDefault(); // Empêche le comportement par défaut du lien
-    
-    //         var hrefValue = $(this).attr('href');
-            
-    //         if (hrefValue.startsWith('#')) {
-    //             var category = hrefValue.substring(1); // Enlève le dièse initial
-    //             console.log('Category selected:', category);
-    
-    //             // Redirige vers la section avec la catégorie sélectionnée
-    //             $('html, body').animate({
-    //                 scrollTop: $("#" + category).offset().top
-    //             }, 1000);
-    //         } else {
-    //             console.error('Invalid href:', hrefValue);
-    //         }
-    //     });
-    // });
-
-//    // Price Slider
-//    var priceSlider = document.getElementById('price-slider');
-   
-//    if (priceSlider) {
-//        noUiSlider.create(priceSlider, {
-//            start: [1, 999],
-//            connect: true,
-//            step: 1,
-//            range: {
-//                'min': 1,
-//                'max': 999
-//            }
-//        });
-
-//        priceSlider.noUiSlider.on('update', function(values, handle) {
-//            var value = values[handle];
-           
-//            if(handle) { 
-//               priceInputMax.value = value; 
-//            } else { 
-//               priceInputMin.value = value; 
-//            }
-//        });
-    //    }
     document.addEventListener("DOMContentLoaded", function() {
         setTimeout(function() {
             var alerts = document.querySelectorAll('.alert');
@@ -224,5 +169,6 @@
             });
         }, 5000); // 5000 ms = 5 seconds
     });
+    
 
 })(jQuery);

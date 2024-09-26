@@ -2152,6 +2152,48 @@ textarea.input {
 /*=========================================================
 	13 -> user
 ===========================================================*/
+.card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.card-header {
+  background-color: #0056b3;
+  color: white;
+  padding: 10px;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.btn {
+  margin-top: 10px;
+}
+
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.shadow-sm {
+  box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+}
+
+.address-card,
+.form-card {
+  flex: 1 1 calc(33.333% - 20px); /* Taille uniforme pour les cartes */
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+.bg-success {
+  background-color: #1e7e34 !important; /* Vert foncé */
+}
 
 
 

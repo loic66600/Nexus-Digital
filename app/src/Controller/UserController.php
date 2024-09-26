@@ -32,12 +32,14 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hacher le mot de passe
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $user->getPassword()
-            );
-            $user->setPassword($hashedPassword);
+            // Récupérer le mot de passe en clair
+            $plainPassword = $form->get('plainPassword')->getData();
+
+            if (!empty($plainPassword)) {
+                // Hacher le mot de passe
+                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword);
+            }
 
             // Persister l'utilisateur
             $entityManager->persist($user);
@@ -52,27 +54,31 @@ final class UserController extends AbstractController
         ]);
     }
 
-    public function show(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}', name: 'app_user_show', methods: ['GET', 'POST'])]
+    public function show(Request $request, User $user, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
-        // Créer le formulaire pour modifier l'utilisateur
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // Mettre à jour les informations de l'utilisateur
+            // Vérifier si un nouveau mot de passe a été fourni
+            $plainPassword = $form->get('plainPassword')->getData();
+            if (!empty($plainPassword)) {
+                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword);
+            }
+
             $entityManager->flush();
-    
-            // Ajouter un message flash pour indiquer le succès de l'opération
             $this->addFlash('success', 'Informations mises à jour avec succès.');
-    
             return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
         }
     
         return $this->render('account/show.html.twig', [
             'user' => $user,
-            'form' => $form->createView(), // Assurez-vous que ceci est présent
+            'form' => $form->createView(),
         ]);
     }
+
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
@@ -87,7 +93,6 @@ final class UserController extends AbstractController
     #[Route('/{id}/address/{addressId}/edit', name: 'app_user_address_edit', methods: ['GET', 'POST'])]
     public function editAddress(Request $request, EntityManagerInterface $entityManager, User $user, int $addressId): Response
     {
-        // Récupérer et vérifier l'adresse
         $address = $entityManager->getRepository(UserInfo::class)->find($addressId);
 
         if (!$address || $address->getUser() !== $user) {
@@ -95,14 +100,12 @@ final class UserController extends AbstractController
         }
 
         if ($request->isMethod('POST')) {
-            // Mettre à jour les informations de l'adresse
             $address->setAddressName($request->request->get('addressName'));
             $address->setAddress($request->request->get('address'));
             $address->setCity($request->request->get('city'));
             $address->setZipCode($request->request->get('zipCode'));
             $address->setCountry($request->request->get('country'));
 
-            // Enregistrer les modifications
             $entityManager->flush();
 
             return $this->redirectToRoute('app_user_show', ['id' => $user->getId()]);
@@ -117,7 +120,6 @@ final class UserController extends AbstractController
     #[Route('/{id}/address/{addressId}/delete', name: 'app_user_address_delete', methods: ['POST'])]
     public function deleteAddress(Request $request, EntityManagerInterface $entityManager, User $user, int $addressId): Response
     {
-        // Récupérer l'adresse à supprimer
         $address = $entityManager->getRepository(UserInfo::class)->find($addressId);
     
         if ($address && $this->isCsrfTokenValid('delete'.$addressId, $request->request->get('_token'))) {

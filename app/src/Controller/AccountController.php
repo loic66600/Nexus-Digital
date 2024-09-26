@@ -11,11 +11,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AccountController extends AbstractController
 {
     #[Route('/account', name: 'app_account')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -28,7 +29,15 @@ class AccountController extends AbstractController
         $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
+            // Vérifiez si un nouveau mot de passe a été saisi
+            if ($plainPassword = $userForm->get('plainPassword')->getData()) {
+                // Hachez le nouveau mot de passe
+                $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword);
+            }
+
             $entityManager->flush();
+            $this->addFlash('success', 'Vos informations ont été mises à jour avec succès.');
             return $this->redirectToRoute('app_account');
         }
 
@@ -52,6 +61,7 @@ class AccountController extends AbstractController
                 if ($editAddressForm->isSubmitted() && $editAddressForm->isValid()) {
                     // Enregistrer les modifications
                     $entityManager->flush();
+                    $this->addFlash('success', 'L\'adresse a été modifiée avec succès.');
                     return $this->redirectToRoute('app_account');
                 }
                 // Indiquer qu'une adresse est en cours d'édition
@@ -68,6 +78,7 @@ class AccountController extends AbstractController
                 // Enregistrer la nouvelle adresse
                 $entityManager->persist($newAddress);
                 $entityManager->flush();
+                $this->addFlash('success', 'La nouvelle adresse a été ajoutée avec succès.');
                 return $this->redirectToRoute('app_account');
             }
         }
@@ -79,8 +90,9 @@ class AccountController extends AbstractController
             'userForm' => $userForm->createView(),
             'addressForm' => isset($addressForm) ? $addressForm->createView() : null,
             'editAddressForm' => isset($editAddressForm) ? $editAddressForm->createView() : null,
-            'editAddress' => isset($editAddress) ? $editAddress : null, // Passez l'objet adresse
-        ]);    }
+            'editAddress' => isset($editAddress) ? $editAddress : null,
+        ]);
+    }
 
     #[Route('/account/address/{id}/delete', name: 'app_account_address_delete', methods: ['POST'])]
     public function deleteAddress(Request $request, EntityManagerInterface $entityManager, UserInfo $address): Response
@@ -91,6 +103,7 @@ class AccountController extends AbstractController
             // Supprimer l'adresse
             $entityManager->remove($address);
             $entityManager->flush();
+            $this->addFlash('success', 'L\'adresse a été supprimée avec succès.');
         }
 
         return $this->redirectToRoute('app_account');
