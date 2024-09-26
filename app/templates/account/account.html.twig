@@ -1,56 +1,132 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Mon Compte{% endblock %}
-
-{% block body %}
 <div class="container mt-5">
-    <h1>Mon Compte</h1>
-    <p>Bienvenue, {{ user.firstName }} {{ user.lastName }}</p>
-    <ul>
-        <li>Nom: {{ user.lastName }}</li>
-        <li>Prénom: {{ user.firstName }}</li>
-        <li>Email: {{ user.email }}</li>
-        {% if user.phone %}
-            <li>Téléphone: {{ user.phone }}</li>
-        {% endif %}
-        
-        <!-- Lien pour modifier les informations utilisateur -->
-        <a href="{{ path('app_user_edit', {id: user.id}) }}" class="btn btn-secondary btn-sm mt-3">Modifier mes informations</a>
-
-        <!-- Afficher les adresses -->
-        <h3 class="mt-4">Vos adresses</h3>
-        <div class="row">
-            <!-- Carte pour ajouter une nouvelle adresse -->
-            <div class="col-md-4 mb-4">
-                <div class="card h-100 text-center border-dashed">
-                    <div class="card-body d-flex align-items-center justify-content-center">
-                        <a href="#" class="text-decoration-none">
-                            <h5 class="card-title">Ajouter une adresse</h5>
-                        </a>
+    <h1 class="mb-4">Mon Compte</h1>
+    
+    <div class="row">
+        <!-- Informations actuelles et adresses -->
+        <div class="col-lg-12 mb-4">
+            <div class="row">
+                <!-- Informations actuelles -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">Informations actuelles</h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Prénom : {{ user.firstName }}</li>
+                            <li class="list-group-item">Nom : {{ user.lastName }}</li>
+                            <li class="list-group-item">Email : {{ user.email }}</li>
+                            <li class="list-group-item">Téléphone : {{ user.phone }}</li>
+                        </ul>
                     </div>
                 </div>
-            </div>
 
-            {% for address in user.userAdresse %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ address.addressName }}</h5>
-                            <p>{{ address.address }}<br>{{ address.city }}, {{ address.zipCode }}<br>{{ address.country }}</p>
+                <!-- Adresses -->
+                <div class="col-lg-6 mb-4">
+                    <h5>Vos adresses</h5>
+                    {% for address in user.userAdresse %}
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ address.addressName }}</h6>
+                                <p>{{ address.address }}<br>{{ address.city }}, {{ address.zipCode }}<br>{{ address.country }}</p>
+                                <div class="d-flex justify-content-between">
+                                    <a href="{{ path('app_account', {edit_address_id: address.id}) }}" class="btn btn-outline-primary btn-sm">Modifier</a>
+                                    <form method="post" action="{{ path('app_account_address_delete', {id: address.id}) }}" style="display:inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ address.id) }}">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette adresse ?');">Effacer</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p>Aucune adresse enregistrée.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaires côte à côte -->
+        <div class="col-lg-18 mb-4">
+            
+                <!-- Formulaire pour modifier les informations utilisateur -->
+                <div class="col-md-4 mb-2 d-flex">
+                    <div class="card shadow-sm w-100">
+                        <div class="card-header bg-secondary text-white">
+                            <h5 class="mb-0">Modifier les informations</h5>
+                        </div>
+                        <div class="card-body p-3">
+                            {{ form_start(userForm, {'attr': {'class': 'form-horizontal'}}) }}
+                            {% for field in userForm %}
+                                {% if field.vars.name in ['email', 'firstName', 'lastName', 'phone'] %}
+                                    <div class="form-group mb-2">
+                                        {{ form_label(field, null, {'label_attr': {'class': 'control-label'}}) }}
+                                        {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_errors(field) }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <!-- Champ du mot de passe -->
+                            {% if 'password' in userForm %}
+                                <div class="form-group mb-2">
+                                    {{ form_label(userForm.password, null, {'label_attr': {'class': 'control-label'}}) }}
+                                    {{ form_widget(userForm.password, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(userForm.password) }}
+                                </div>
+                            {% endif %}
+                             {{ form_end(userForm) }}
+                            <!-- Bouton Mettre à jour -->
+                            <button type="submit" class="btn btn-primary btn-sm">Mettre à jour</button>
                            
-                            <!-- Liens pour modifier ou supprimer l'adresse -->
-                            <a href="{{ path('app_user_address_edit', {id: user.id, addressId: address.id}) }}" class="btn btn-primary btn-sm">Modifier</a>
-                            <form method="post" action="{{ path('app_user_address_delete', {id: user.id, addressId: address.id}) }}" style="display:inline;">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ address.id) }}">
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette adresse ?');">Effacer</button>
-                            </form>
                         </div>
                     </div>
                 </div>
-            {% else %}
-                <p>Aucune adresse enregistrée.</p>
-            {% endfor %}
-        </div>
-    </ul>
-</div>
-{% endblock %}
+
+                <!-- Formulaire pour ajouter une nouvelle adresse -->
+                {% if addressForm is not null %}
+                    <div class="col-md-4 mb-2 d-flex">
+                        <div class="card shadow-sm w-100">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0">Ajouter une nouvelle adresse</h5>
+                            </div>
+                            <div class="card-body p-3">
+                                {{ form_start(addressForm) }}
+                                {% for field in addressForm %}
+                                    <div class="form-group mb-2">
+                                        {{ form_label(field, null, {'label_attr': {'class': 'control-label'}}) }}
+                                        {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_errors(field) }}
+                                    </div>
+                                {% endfor %}
+                                <button type="submit" class="btn btn-success btn-sm">Ajouter</button>
+                                {{ form_end(addressForm) }}
+                            </div>
+                        </div>
+                    </div> 
+                {% endif %}
+
+                <!-- Formulaire pour modifier l'adresse existante -->
+                {% if editAddressForm is not null %}
+                    <div class="col-md-4 mb-2 d-flex">
+                        <div class="card shadow-sm w-100">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="mb-0">Modifier l'adresse</h5>
+                                                </div>
+                            <div class="card-body p-3">
+                                {{ form_start(editAddressForm) }}
+                                {% for field in editAddressForm %}
+                                    <div class="form-group mb-2">
+                                        {{ form_label(field, null, {'label_attr': {'class': 'control-label'}}) }}
+                                        {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_errors(field) }}
+                                    </div>
+                                {% endfor %}
+                                <button type="submit" class="btn btn-primary btn-sm">Enregistrer</button>
+                                {{ form_end(editAddressForm) }}
+                            </div>
+                        </div>
+                    </div> 
+                {% endif %}
+            <!-- Fin de la rangée des formulaires -->
+        </div> <!-- Fin de la colonne des formulaires -->
+    </div> <!-- Fin de la rangée principale -->
+</div> <!-- Fin du container principal -->

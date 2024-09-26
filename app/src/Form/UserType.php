@@ -8,6 +8,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+
 
 class UserType extends AbstractType
 {
@@ -33,8 +35,8 @@ class UserType extends AbstractType
             ->add('phone', null, [
                 'required' => false,
                 'attr' => ['class' => 'form-control'],
-            ])
-        ;
+            ]);
+           
     }
 
     public function configureOptions(OptionsResolver $resolver): void
