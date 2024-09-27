@@ -20,7 +20,6 @@ class HomeController extends AbstractController
         $this->produitsRepository = $produitsRepository;
         $this->categorieRepository = $categorieRepository;
     }
-
     #[Route('/', name: 'home_index', defaults: ['category' => null])]
     public function index(?string $category, Request $request): Response
     {
@@ -32,19 +31,22 @@ class HomeController extends AbstractController
         }
 
         $produitsWithRatings = $this->addRatingsToProducts($produits);
+        usort($produitsWithRatings, function ($a, $b) {
+            return $b['averageRating'] <=> $a['averageRating'];
+        });
+
         $categories = $this->categorieRepository->findAll();
         $panier = $this->getPanier();
         $wishlistCount = $this->getWishlistCount($request);
 
         return $this->render('home/index.html.twig', [
-            'produits' => $produitsWithRatings,
+            'produits' => array_slice($produitsWithRatings, 0, 10), // Limite à 10 meilleurs produits
             'selectedCategory' => $category,
             'categories' => $categories,
             'panier' => $panier,
             'wishlistCount' => $wishlistCount,
         ]);
     }
-
     #[Route('/home-categorie/{id}', name: 'app_home_category')]
     public function category(int $id, Request $request): Response
     {
@@ -104,5 +106,6 @@ class HomeController extends AbstractController
             ];
         }
         return $produitsWithRatings;
+
     }
 }

@@ -66,4 +66,16 @@ class ProduitsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+    public function findAllOrderedByIdDesc()
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.images', 'i')
+            ->addSelect('i')
+            ->leftJoin('p.categories', 'c')
+            ->addSelect('c')
+            ->orderBy('p.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

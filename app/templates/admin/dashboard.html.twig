@@ -3,41 +3,37 @@
 {% block title %}Dashboard Admin{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="text-center mb-4">Dashboard Admin</h1>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-12">
-            <a href="{{ path('home_index') }}" class="btn btn-secondary">
+<div class="container-fluid vh-100 d-flex justify-content-center align-items-center">
+    <div class="row justify-content-center align-items-center w-100">
+        <div class="col-12 col-md-8 text-center">
+            <h1 class="mb-4">Dashboard Admin</h1>
+            
+            <a href="{{ path('home_index') }}" class="btn btn-secondary mb-4">
                 <i class="fa fa-arrow-left"></i> Retour sur Home
             </a>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Gestion des Avis</h5>
-                    <a href="{{ path('admin_avis') }}" class="btn btn-primary">
-                        <i class="fa fa-comments"></i> Gérer les avis
-                    </a>
+            <div class="row justify-content-center">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <h5 class="card-title">Gestion des Avis</h5>
+                            <a href="{{ path('admin_avis') }}" class="btn btn-primary mt-3">
+                                <i class="fa fa-comments"></i> Gérer les avis
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <br>
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Consultez et gérez la liste des utilisateurs.</h5>
-                    <a href="{{ path('admin_users') }}" class="btn btn-primary">
-                        <i class="fa fa-users"></i> Liste des utilisateurs
-                    </a>
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <h5 class="card-title">Gestion des Utilisateurs</h5>
+                            <a href="{{ path('admin_users') }}" class="btn btn-primary mt-3">
+                                <i class="fa fa-users"></i> Liste des utilisateurs
+                            </a>
+                        </div>
+                    </div>
                 </div>
+                {# TODO: FORMULAIRE OUR METRE DE NOUVEAU ARTICLE EN LIGNE #}
             </div>
         </div>
     </div>
