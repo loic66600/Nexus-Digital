@@ -3,65 +3,73 @@
 {% block body %}
     <!-- EN-TÊTE -->
     <header>
-  <!-- EN-TÊTE SUPÉRIEUR -->
-<div id="top-header">
-    <div class="container">
-        <ul class="header-links pull-left">
-		
-		<li>
-			<a href="#">
-				<i class="fa fa-phone"></i>
-				+021-95-51-84
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<i class="fa fa-envelope-o"></i>
-				email@email.com
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<i class="fa fa-map-marker"></i>
-				1734 Rue Stonecoal
-			</a>
-		</li>
-	</ul>
+        <!-- EN-TÊTE SUPÉRIEUR -->
+        <div id="top-header">
+            <div class="container">
+                <ul class="header-links pull-left">
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-phone"></i>
+                            +021-95-51-84
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-envelope-o"></i>
+                            email@email.com
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-map-marker"></i>
+                            1734 Rue Stonecoal
+                        </a>
+                    </li>
+                </ul>
      
-        <ul class="header-links pull-right">
-            {% if app.user %}
-                <li>
-				<span class="text-primary">Bonjour, {{ app.user.firstName }} {{ app.user.lastName }}                </li>
-                <li>
-                    <a href="{{ path('app_logout') }}">
-                        <i class="fa fa-sign-out"></i>
-                        Déconnexion
-                    </a>
-                </li>
-                <li>
-                    <a href="/account">
-                        <i class="fa fa-user-o"></i>
-                        Mon Compte
-                    </a>
-                </li>
-            {% else %}
-                <li>
-                    <a href="{{ path('app_user_new') }}">
-                        <i class="fa fa-user-plus"></i>
-                        S'inscrire
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('app_login') }}">
-                        <i class="fa fa-sign-in"></i>
-                        Connexion
-                    </a>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
-</div>
-<!-- /EN-TÊTE SUPÉRIEUR -->
+                <ul class="header-links pull-right">
+                    {% if app.user %}
+                        <li>
+                            <span class="text-primary">Bonjour, {{ app.user.firstName }} {{ app.user.lastName }}</span>
+                        </li>
+                        <li>
+                            <a href="{{ path('app_logout') }}">
+                                <i class="fa fa-sign-out"></i>
+                                Déconnexion
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/account">
+                                <i class="fa fa-user-o"></i>
+                                Mon Compte
+                            </a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('admin_dashboard') }}">
+                                    <i class="fa fa-cog"></i>
+                                    Admin
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li>
+                            <a href="{{ path('app_user_new') }}">
+                                <i class="fa fa-user-plus"></i>
+                                S'inscrire
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('app_login') }}">
+                                <i class="fa fa-sign-in"></i>
+                                Connexion
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <!-- /EN-TÊTE SUPÉRIEUR -->
 
         <!-- EN-TÊTE PRINCIPAL -->
         <div id="header">

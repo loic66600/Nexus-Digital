@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Avis;
 use App\Repository\ProduitsRepository;
 use App\Repository\CategorieRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,27 +25,19 @@ class HomeController extends AbstractController
     public function index(?string $category, Request $request): Response
     {
         if ($category) {
-            // Remplacez les tirets bas par des espaces pour correspondre aux noms dans la base de données
             $category = str_replace('_', ' ', $category);
             $produits = $this->produitsRepository->findByCategoryName($category);
         } else {
-            // Récupérer tous les produits si aucune catégorie n'est spécifiée
             $produits = $this->produitsRepository->AllProduit();
         }
 
-        // Récupérer toutes les catégories pour l'affichage des onglets
+        $produitsWithRatings = $this->addRatingsToProducts($produits);
         $categories = $this->categorieRepository->findAll();
-
-        // Récupérer le panier de l'utilisateur actuel
         $panier = $this->getPanier();
-
-        // Récupérer le nombre d'articles dans la wishlist à partir de la session
-        $session = $request->getSession();
-        $wishlistIds = $session->get('wishlist', []);
-        $wishlistCount = count($wishlistIds);
+        $wishlistCount = $this->getWishlistCount($request);
 
         return $this->render('home/index.html.twig', [
-            'produits' => $produits,
+            'produits' => $produitsWithRatings,
             'selectedCategory' => $category,
             'categories' => $categories,
             'panier' => $panier,
@@ -55,28 +48,19 @@ class HomeController extends AbstractController
     #[Route('/home-categorie/{id}', name: 'app_home_category')]
     public function category(int $id, Request $request): Response
     {
-        // Récupérer la catégorie sélectionnée
         $category = $this->categorieRepository->findOneById($id);
         if (!$category) {
             throw $this->createNotFoundException('No category found for id ' . $id);
         }
 
-        // Récupérer tous les produits de la catégorie sélectionnée
         $produits = $this->produitsRepository->findByCategoryName($category->getName());
-
-        // Récupérer toutes les catégories pour l'affichage des onglets
+        $produitsWithRatings = $this->addRatingsToProducts($produits);
         $categories = $this->categorieRepository->findAll();
-
-        // Récupérer le panier de l'utilisateur actuel
         $panier = $this->getPanier();
-
-        // Récupérer le nombre d'articles dans la wishlist à partir de la session
-        $session = $request->getSession();
-        $wishlistIds = $session->get('wishlist', []);
-        $wishlistCount = count($wishlistIds);
+        $wishlistCount = $this->getWishlistCount($request);
 
         return $this->render('home/index.html.twig', [
-            'produits' => $produits,
+            'produits' => $produitsWithRatings,
             'selectedCategory' => $category->getName(),
             'categories' => $categories,
             'panier' => $panier,
@@ -86,10 +70,39 @@ class HomeController extends AbstractController
 
     private function getPanier()
     {
-        // Fonction pour récupérer le panier de l'utilisateur actuel
         if ($user = $this->getUser()) {
             return method_exists($user, 'getPaniers') ? $user->getPaniers()->last() : null;
         }
         return null;
+    }
+
+    private function getWishlistCount(Request $request): int
+    {
+        $session = $request->getSession();
+        $wishlistIds = $session->get('wishlist', []);
+        return count($wishlistIds);
+    }
+
+    private function calculateAverageRating($product): float
+    {
+        $avis = $product->getAvis()->filter(function(Avis $avi) {
+            return $avi->isValide();
+        });
+        $totalNotes = array_reduce($avis->toArray(), function ($carry, Avis $avi) {
+            return $carry + $avi->getNote();
+        }, 0);
+        return count($avis) > 0 ? round($totalNotes / count($avis), 1) : 0;
+    }
+
+    private function addRatingsToProducts(array $produits): array
+    {
+        $produitsWithRatings = [];
+        foreach ($produits as $produit) {
+            $produitsWithRatings[] = [
+                'produit' => $produit,
+                'averageRating' => $this->calculateAverageRating($produit)
+            ];
+        }
+        return $produitsWithRatings;
     }
 }

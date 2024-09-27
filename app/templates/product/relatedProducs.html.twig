@@ -22,7 +22,9 @@
             {% endfor %}
             <!-- /Messages Flash -->
 
-            {% for associatedProduct in associatedProducts %}
+            {% for item in associatedProducts %}
+                {% set associatedProduct = item.product %}
+                {% set productAverageRating = item.averageRating %}
                 <!-- product -->
                 <div class="col-md-3 col-xs-6">
                     <div class="product">
@@ -46,12 +48,13 @@
                             <h4 class="product-price">{{ associatedProduct.prices }} €</h4>
                             <div class="product-rating">
                                 {% for i in 1..5 %}
-                                    {% if i <= averageRating %}
+                                    {% if i <= productAverageRating %}
                                         <i class="fa fa-star"></i>
                                     {% else %}
                                         <i class="fa fa-star-o"></i>
                                     {% endif %}
                                 {% endfor %}
+                                <span>({{ productAverageRating|number_format(1) }})</span>
                             </div>
                             <div class="product-btns">
                                 <!-- Formulaire pour ajouter à la wishlist -->

@@ -6,6 +6,7 @@ use App\Entity\Produits;
 use App\Entity\LignePanier;
 use App\Entity\Panier;
 use App\Entity\Status;
+use App\Entity\Avis;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,28 +18,26 @@ class CartController extends AbstractController
     #[Route('/cart', name: 'app_cart', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, Request $request): Response
     {
-        // Vérifier si l'utilisateur est authentifié
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Récupérer le panier de l'utilisateur actuel
         $panier = null;
         if ($this->getUser()) {
             $panier = $this->getUser()->getPaniers()->last();
         }
 
-        // Récupérer la wishlist à partir de la session
         $session = $request->getSession();
         $wishlistIds = $session->get('wishlist', []);
         
         if (!empty($wishlistIds)) {
             $wishlistProducts = $entityManager->getRepository(Produits::class)->findBy(['id' => $wishlistIds]);
+            $wishlistWithRatings = $this->addRatingsToProducts($wishlistProducts);
         } else {
-            $wishlistProducts = [];
+            $wishlistWithRatings = [];
         }
 
         return $this->render('cart/index.html.twig', [
             'panier' => $panier,
-            'wishlist' => $wishlistProducts,
+            'wishlist' => $wishlistWithRatings,
             'wishlistCount' => count($wishlistIds),
         ]);
     }
@@ -46,10 +45,8 @@ class CartController extends AbstractController
     #[Route('/cart/add/{id}', name: 'cart_add', methods: ['POST'])]
     public function add(Produits $produit, EntityManagerInterface $entityManager, Request $request): Response
     {
-        // Vérifier si l'utilisateur est authentifié
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Récupérer ou créer un nouveau panier pour l'utilisateur actuel
         $user = $this->getUser();
         $panier = null;
         
@@ -63,7 +60,6 @@ class CartController extends AbstractController
             $panier->setNumCommande(uniqid('cmd_', true));
             $panier->setOrderDate(new \DateTime());
 
-            // Vérifier et définir le statut par défaut
             $defaultStatus = $entityManager->getRepository(Status::class)->findOneBy(['label' => 'Pending']);
             if (!$defaultStatus) {
                 throw new \Exception('Default status not found.');
@@ -73,7 +69,6 @@ class CartController extends AbstractController
             $entityManager->persist($panier);
         }
 
-        // Vérifier si le produit est déjà dans le panier
         $lignePanier = null;
         foreach ($panier->getLignePaniers() as $ligne) {
             if ($ligne->getProduct()->getId() === $produit->getId()) {
@@ -83,10 +78,8 @@ class CartController extends AbstractController
         }
 
         if ($lignePanier) {
-            // Augmenter la quantité si le produit est déjà dans le panier
             $lignePanier->setQuantity($lignePanier->getQuantity() + 1);
         } else {
-            // Créer une nouvelle ligne de panier si le produit n'est pas encore dans le panier
             $lignePanier = new LignePanier();
             $lignePanier->setProduct($produit);
             $lignePanier->setQuantity(1);
@@ -94,39 +87,31 @@ class CartController extends AbstractController
             $entityManager->persist($lignePanier);
         }
 
-        // Persister les changements
         $entityManager->flush();
 
-        // Ajouter un message flash
         $this->addFlash('success', 'Votre article a été ajouté au panier.');
 
-        // Rediriger vers la page précédente
         return $this->redirect($request->headers->get('referer'));
     }
 
     #[Route('/cart/remove/{id}', name: 'cart_remove', methods: ['POST'])]
     public function remove(LignePanier $lignePanier, EntityManagerInterface $entityManager): Response
     {
-        // Vérifier si l'utilisateur est authentifié
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Supprimer la ligne de panier
         if ($lignePanier) {
             $entityManager->remove($lignePanier);
             $entityManager->flush();
         }
 
-        // Rediriger vers la page du panier
         return $this->redirectToRoute('app_cart');
     }
 
     #[Route('/wishlist/add/{id}', name: 'wishlist_add', methods: ['POST'])]
     public function addWishlist(Produits $produit, Request $request): Response
     {
-        // Vérifier si l'utilisateur est authentifié
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Ajouter le produit à la session de wishlist
         $session = $request->getSession();
         $wishlist = $session->get('wishlist', []);
 
@@ -138,7 +123,29 @@ class CartController extends AbstractController
             $this->addFlash('info', 'Produit déjà dans votre liste de souhaits.');
         }
 
-        // Rediriger vers la page précédente
         return $this->redirect($request->headers->get('referer'));
+    }
+
+    private function calculateAverageRating($product): float
+    {
+        $avis = $product->getAvis()->filter(function(Avis $avi) {
+            return $avi->isValide();
+        });
+        $totalNotes = array_reduce($avis->toArray(), function ($carry, Avis $avi) {
+            return $carry + $avi->getNote();
+        }, 0);
+        return count($avis) > 0 ? round($totalNotes / count($avis), 1) : 0;
+    }
+
+    private function addRatingsToProducts(array $products): array
+    {
+        $productsWithRatings = [];
+        foreach ($products as $product) {
+            $productsWithRatings[] = [
+                'produit' => $product,
+                'averageRating' => $this->calculateAverageRating($product)
+            ];
+        }
+        return $productsWithRatings;
     }
 }

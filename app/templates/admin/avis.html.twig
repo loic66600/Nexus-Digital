@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des avis{% endblock %}
+
+{% block body %}
+    <h1>Gestion des avis</h1>
+    <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary mb-3">
+        <i class="fa fa-arrow-left"></i> Retour au tableau de bord
+    </a>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="mb-3">
+        <form action="{{ path('admin_avis') }}" method="get" class="form-inline">
+            <label for="sort" class="mr-2">Trier par :</label>
+            <select name="sort" id="sort" class="form-control mr-2">
+                <option value="date_desc" {% if app.request.query.get('sort') == 'date_desc' %}selected{% endif %}>Date (plus récent)</option>
+                <option value="date_asc" {% if app.request.query.get('sort') == 'date_asc' %}selected{% endif %}>Date (plus ancien)</option>
+                <option value="product_asc" {% if app.request.query.get('sort') == 'product_asc' %}selected{% endif %}>Produit (A-Z)</option>
+                <option value="product_desc" {% if app.request.query.get('sort') == 'product_desc' %}selected{% endif %}>Produit (Z-A)</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Trier</button>
+        </form>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Utilisateur</th>
+                <th>Note</th>
+                <th>Commentaire</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for avi in avis %}
+            <tr>
+                <td>{{ avi.product.name }}</td>
+                <td>{{ avi.client.email }}</td>
+                <td>{{ avi.note }}/5</td>
+                <td>{{ avi.comment }}</td>
+                <td>{{ avi.dateNotice|date('d/m/Y H:i') }}</td>
+                <td>{{ avi.isValide ? 'Validé' : 'En attente' }}</td>
+                <td>
+                    {% if not avi.isValide %}
+                        <a href="{{ path('admin_avis_valider', {'id': avi.id}) }}" class="btn btn-success">Valider</a>
+                    {% endif %}
+                    <a href="{{ path('admin_avis_supprimer', {'id': avi.id}) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet avis ?')">Supprimer</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -18,6 +18,8 @@
         </div>
     </div>
 </div>
+<!-- /BREADCRUMB -->
+
 <!-- Messages Flash -->
 {% for label, messages in app.flashes %}
     <div class="col-md-12">
@@ -29,15 +31,19 @@
     </div>
 {% endfor %}
 <!-- /Messages Flash -->
+
 <!-- SECTION -->
 <div class="section">
     <div class="container">
         <div class="row">
-            {% for category in categories %}
+            {% for categoryData in categories %}
+                {% set category = categoryData.category %}
                 <div id="{{ category.name }}" class="col-md-12">
                     <h4>{{ category.name }}</h4>
                     <div class="row">
-                        {% for produit in category.produits %}
+                        {% for produitData in categoryData.produitsWithRatings %}
+                            {% set produit = produitData.produit %}
+                            {% set averageRating = produitData.averageRating %}
                             <!-- product -->
                             <div class="col-md-3 col-xs-6">
                                 <div class="product">
@@ -56,8 +62,9 @@
                                         <h4 class="product-price">{{ produit.prices }} €</h4>
                                         <div class="product-rating">
                                             {% for i in 1..5 %}
-                                                <i class="fa fa-star"></i>
+                                                <i class="fa fa-star{% if i > averageRating %}-o{% endif %}" style="color: #D10024;"></i>
                                             {% endfor %}
+                                            <span>({{ averageRating|number_format(1) }})</span>
                                         </div>
 
                                         <!-- Formulaire pour ajouter à la wishlist -->
@@ -91,3 +98,4 @@
         </div>
     </div>
 </div>
+<!-- /SECTION -->

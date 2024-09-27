@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Assert\Regex;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -19,10 +21,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    /**
-     * @Assert\NotBlank(message="L'adresse e-mail est obligatoire.")
-     * @Assert\Email(message="Veuillez entrer une adresse e-mail valide.")
-     */
+    #[Assert\NotBlank(message: "L'adresse e-mail est obligatoire.")]
+    #[Assert\Email(message: "Veuillez entrer une adresse e-mail valide.")]
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
@@ -38,29 +38,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstName = null;
 
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
-     /**
-     * @Assert\Regex(
-     *     pattern="/^(0[1-9]{1})([0-9]{8})$/",
-     *     message="Le numéro de téléphone doit être un numéro valide à 10 chiffres."
-     * )
-     */
+    #[Assert\Regex(
+        pattern: "/^(0[1-9]{1})([0-9]{8})$/",
+        message: "Le numéro de téléphone doit être un numéro valide à 10 chiffres."
+    )]
     private ?string $phone = null;
 
-    /**
-     * @var Collection<int, Avis>
-     */
     #[ORM\OneToMany(targetEntity: Avis::class, mappedBy: 'client')]
     private Collection $avis;
 
-    /**
-     * @var Collection<int, Panier>
-     */
     #[ORM\OneToMany(targetEntity: Panier::class, mappedBy: 'client')]
     private Collection $paniers;
 
-    /**
-     * @var Collection<int, UserInfo>
-     */
     #[ORM\OneToMany(targetEntity: UserInfo::class, mappedBy: 'user')]
     private Collection $userAdresse;
 
@@ -154,9 +143,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Avis>
-     */
     public function getAvis(): Collection
     {
         return $this->avis;
@@ -168,25 +154,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->avis->add($avi);
             $avi->setClient($this);
         }
-
         return $this;
     }
 
     public function removeAvi(Avis $avi): static
     {
         if ($this->avis->removeElement($avi)) {
-            // set the owning side to null (unless already changed)
             if ($avi->getClient() === $this) {
                 $avi->setClient(null);
             }
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Panier>
-     */
     public function getPaniers(): Collection
     {
         return $this->paniers;
@@ -198,25 +178,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->paniers->add($panier);
             $panier->setClient($this);
         }
-
         return $this;
     }
 
     public function removePanier(Panier $panier): static
     {
         if ($this->paniers->removeElement($panier)) {
-            // set the owning side to null (unless already changed)
             if ($panier->getClient() === $this) {
                 $panier->setClient(null);
             }
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, UserInfo>
-     */
     public function getUserAdresse(): Collection
     {
         return $this->userAdresse;
@@ -228,19 +202,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $this->userAdresse->add($userAdresse);
             $userAdresse->setUser($this);
         }
-
         return $this;
     }
 
     public function removeUserAdresse(UserInfo $userAdresse): static
     {
         if ($this->userAdresse->removeElement($userAdresse)) {
-            // set the owning side to null (unless already changed)
             if ($userAdresse->getUser() === $this) {
                 $userAdresse->setUser(null);
             }
         }
-
         return $this;
     }
 }

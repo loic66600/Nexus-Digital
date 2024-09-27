@@ -1,247 +1,206 @@
 <!-- SECTION -->
-<div
-	class="section">
-	<!-- conteneur -->
-	<div
-		class="container">
-		<!-- ligne -->
-					<!-- Messages Flash -->
-					{% for label, messages in app.flashes %}
-					<div class="col-md-12">
-						<div class="alert alert-{{ label }} fade-out">
-							{% for message in messages %}
-								<p>{{ message }}</p>
-							{% endfor %}
-						</div>
-					</div>
-				{% endfor %}
-				<!-- /Messages Flash -->
-	
-		<div
-			class="row">
-			<!-- Image principale du produit -->
-			<div class="col-md-5 col-md-push-2">
-				<div id="product-main-img">
-					{% for image in product.images %}
-						<div class="product-preview">
-							<img src="{{ asset('assets/img/' ~ image.name) }}" alt="{{ product.name }}">
-						</div>
-					{% else %}
-						<div class="product-preview">
-							<img src="/assets/img/product01.png" alt="Image par défaut">
-						</div>
-					{% endfor %}
-				</div>
-			</div>
-			<!-- /Image principale du produit -->
+<div class="section">
+    <!-- conteneur -->
+    <div class="container">
+        <!-- Messages Flash -->
+        {% for label, messages in app.flashes %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-{{ label }} fade-out">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <!-- /Messages Flash -->
 
-			<!-- Miniatures du produit -->
-			<div class="col-md-2 col-md-pull-5">
-				<div id="product-imgs">
-					{% for image in product.images %}
-						<div
-							class="product-preview">
-							{# <img src="{{ asset('assets/img/' ~ produit.images[0].name) }}" alt="{{ produit.name }}"> #}
+        <!-- ligne -->
+        <div class="row">
+            <!-- Image principale du produit -->
+            <div class="col-md-5 col-md-push-2">
+                <div id="product-main-img">
+                    {% for image in product.images %}
+                        <div class="product-preview">
+                            <img src="{{ asset('assets/img/' ~ image.name) }}" alt="{{ product.name }}">
+                        </div>
+                    {% else %}
+                        <div class="product-preview">
+                            <img src="{{ asset('assets/img/product01.png') }}" alt="Image par défaut">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- /Image principale du produit -->
 
-							<img src="{{ asset('assets/img/' ~ image.name) }}" alt="{{ product.name }}">
-						</div>
-					{% else %}
-						<div class="product-preview">
-							<img src="/assets/img/product01.png" alt="Image par défaut">
-						</div>
-					{% endfor %}
-				</div>
-			</div>
-			<!-- /Miniatures du produit -->
+            <!-- Miniatures du produit -->
+            <div class="col-md-2 col-md-pull-5">
+                <div id="product-imgs">
+                    {% for image in product.images %}
+                        <div class="product-preview">
+                            <img src="{{ asset('assets/img/' ~ image.name) }}" alt="{{ product.name }}">
+                        </div>
+                    {% else %}
+                        <div class="product-preview">
+                            <img src="{{ asset('assets/img/product01.png') }}" alt="Image par défaut">
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- /Miniatures du produit -->
 
-			<!-- Détails du produit -->
-			<div class="col-md-5">
-				<div class="product-details">
-					<h2 class="product-name">{{ product.name }}</h2>
-					<div>
-						<div class="product-rating">
-							{% for i in 1..5 %}
-								{% if i <= averageRating %}
-									<i class="fa fa-star"></i>
-								{% else %}
-									<i class="fa fa-star-o"></i>
-								{% endif %}
-							{% endfor %}
-						</div>
-						<a class="review-link" href="#">{{ product.avis|length }}
-							Avis | Ajouter votre avis</a>
+            <!-- Détails du produit -->
+            <div class="col-md-5">
+                <div class="product-details">
+                    <h2 class="product-name">{{ product.name }}</h2>
+                    <div>
+                        <div class="product-rating">
+                            {% for i in 1..5 %}
+                                <i class="fa fa-star{% if i > averageRating %}-o{% endif %}" style="color: red;"></i>
+                            {% endfor %}
+                            <span>({{ averageRating|number_format(1) }})</span>
+                        </div>
+                        <a class="review-link" href="#reviews">{{ product.avis|length }} Avis | Ajouter votre avis</a>
+                        <span class="product-available">
+                            {% if totalStockQuantity > 0 %}En stock{% else %}Rupture de stock{% endif %}
+                        </span>
+                    </div>
+                    <div>
+                        <h3 class="product-price">{{ product.prices }} €</h3>
+                    </div>
+                    <p>{{ product.description }}</p>
 
-						<span class="product-available">
-							{% if totalStockQuantity > 0 %}
-								En stock
-							{% else %}
-								Rupture de stock
-							{% endif %}
-						</span>
-					</div>
-					<div>
-						<h3 class="product-price">{{ product.prices }}
-							€</h3>
-					</div>
-					<p>{{ product.description }}</p>
+                    <ul class="product-links">
+                        <li>Catégorie :</li>
+                        {% for category in product.categories %}
+                            <li>
+                                <a href="#">{{ category.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
 
-					<!-- Les options du produit et la fonctionnalité du panier peuvent rester inchangées ou être personnalisées selon les besoins -->
+                    <!-- Bouton Ajouter au panier -->
+                    <div class="add-to-cart">
+                        <form action="{{ path('cart_add', {'id': product.id}) }}" method="post">
+                            <button type="submit" class="add-to-cart-btn">
+                                <i class="fa fa-shopping-cart"></i> Ajouter au panier
+                            </button>
+                        </form>
+                    </div>
 
-					<ul class="product-links">
-						<li>Catégorie :</li>
-						{% for category in product.categories %}
-							<li>
-								<a href="#">{{ category.name }}</a>
-							</li>
-							{% if not loop.last %},
-							{% endif %}
-						{% endfor %}
-					</ul>
+                    <!-- Boutons Liste de souhaits et Comparer -->
+                    <ul class="product-btns">
+                        {# Bouton wishlist commenté #}
+                    </ul>
+                </div>
+            </div>
+            <!-- /Détails du produit -->
+        </div>
+        <!-- /ligne -->
 
-					<!-- Bouton Ajouter au panier -->
-					<div class="add-to-cart">
-					<form action="{{ path('cart_add', {'id': product.id}) }}" method="post">
-						<button type="submit" class="add-to-cart-btn">
-							<i class="fa fa-shopping-cart"></i> Ajouter au panier
-						</button>
-					</form>
-				</div>
+        <!-- Onglet du produit -->
+        <div class="row">
+            <div class="col-md-12">
+                <div id="product-tab">
+                    <!-- navigation des onglets du produit -->
+                    <ul class="tab-nav">
+                        <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+                        <li><a data-toggle="tab" href="#tab3">Avis ({{ product.avis|length }})</a></li>
+                    </ul>
+                    <!-- /navigation des onglets du produit -->
 
-					<!-- Boutons Liste de souhaits et Comparer -->
-					<ul class="product-btns">
-						{# <form action="{{ path('wishlist_add', {'id': produit.id}) }}" method="post" style="display: inline;">
-							<button type="submit" class="add-to-wishlist">
-								<i class="fa fa-heart-o"></i>
-								<span class="tooltipp">Ajouter à la liste de souhaits</span>
-							</button>
-						</form> #}
-						
-					</ul>
-				</div>
-			</div>
-			<!-- /Détails du produit -->
+                    <!-- contenu des onglets du produit -->
+                    <div class="tab-content">
+                        <!-- onglet1 -->
+                        <div id="tab1" class="tab-pane fade in active">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <p>{{ product.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /onglet1 -->
 
-		</div>
-	</div>
-	<!-- /Détails du produit -->
-	<!-- Onglet du produit -->
-	<div class="col-md-12">
-		<div
-			id="product-tab">
-			<!-- navigation des onglets du produit -->
-			<ul class="tab-nav">
-				<li class="active">
-					<a data-toggle="tab" href="#tab1">Description</a>
-				</li>
+                        <!-- onglet3 -->
+                        <div id="tab3" class="tab-pane fade in">
+                            <div class="row">
+                                <!-- Note -->
+                                <div class="col-md-3">
+                                    <div id="rating">
+                                        <div class="rating-avg">
+                                            <span>{{ averageRating|number_format(1) }}</span>
+                                            <div class="rating-stars">
+                                                {% for i in 1..5 %}
+                                                    <i class="fa fa-star{% if i > averageRating %}-o{% endif %}" style="color: red;"></i>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /Note -->
 
-				<li>
-					<a data-toggle="tab" href="#tab3">Avis ({{ product.avis|length }})</a>
-				</li>
-			</ul>
-			<!-- /navigation des onglets du produit -->
+                                <!-- Avis -->
+                                <div class="col-md-6">
+                                    <div id="reviews">
+                                        <ul class="reviews">
+                                            {% set validAvis = product.avis|filter(a => a.isValide)|slice(0, 3) %}
+                                            {% for avi in validAvis %}
+                                                <li>
+                                                    <div class="review-heading">
+                                                        <h5 class="name">{{ avi.client.firstName }}</h5>
+                                                        <p class="date">{{ avi.dateNotice|date('d M Y, H:i') }}</p>
+                                                        <div class="review-rating">
+                                                            {% for i in 1..5 %}
+                                                                <i class="fa fa-star{% if i > avi.note %}-o{% endif %}" style="color: red;"></i>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="review-body">
+                                                        <p>{{ avi.comment }}</p>
+                                                    </div>
+                                                </li>
+                                            {% else %}
+                                                <li>Pas encore d'avis.</li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- /Avis -->
 
-			<!-- contenu des onglets du produit -->
-			<div
-				class="tab-content">
-				<!-- onglet1  -->
-				<div id="tab1" class="tab-pane fade in active">
-					<div class="row">
-						<div class="col-md-12">
-							<p>{{ product.description }}</p>
-						</div>
-					</div>
-				</div>
-				<!-- /onglet1  -->
-
-				<!-- onglet2  -->
-				<div id="tab2" class="tab-pane fade in">
-					<div class="row"></div>
-				</div>
-				<!-- /onglet2  -->
-
-				<!-- onglet3  -->
-				<div id="tab3" class="tab-pane fade in">
-					<div
-						class="row">
-						<!-- Note -->
-						<div class="col-md-3">
-							<div id="rating">
-								<div class="rating-avg">
-									<span>{{ averageRating }}</span>
-									<div class="rating-stars">
-										{% for i in 1..5 %}
-											{% if i <= averageRating %}
-												<i class="fa fa-star"></i>
-											{% else %}
-												<i class="fa fa-star-o"></i>
-											{% endif %}
-										{% endfor %}
-									</div>
-								</div>
-								<!-- Vous pouvez ajouter ici une répartition détaillée des notes si nécessaire -->
-							</div>
-						</div>
-						<!-- /Note -->
-						<!-- Avis -->
-						<div class="col-md-6">
-							<div id="reviews">
-								<ul class="reviews">
-									{% for avi in product.avis %}
-										<li>
-											<div class="review-heading">
-												<h5 class="name">{{ avi.client.firstName }}</h5>
-												<!-- En supposant que le client a une propriété firstName -->
-												<p class="date">{{ avi.dateNotice|date('d M Y, H:i') }}</p>
-												<div class="review-rating">
-													{% for i in 1..5 %}
-														{% if i <= avi.note %}
-															<i class="fa fa-star"></i>
-														{% else %}
-															<i class="fa fa-star-o empty"></i>
-														{% endif %}
-													{% endfor %}
-												</div>
-											</div>
-											<div class="review-body">
-												<p>{{ avi.comment }}</p>
-											</div>
-										</li>
-									{% else %}
-										<li>Pas encore d'avis.</li>
-									{% endfor %}
-								</ul>
-
-							</div>
-						</div>
-						<!-- /Avis -->
-
-						<!-- Formulaire d'avis -->
-						<div class="col-md-3">
-							<div id="review-form">
-								<form method="post" action="{{ path('submit_review', {'id': product.id}) }}" class="review-form">
-									<input name="_name" class="input" type="text" placeholder="Votre nom" required>
-									<input name="_email" class="input" type="email" placeholder="Votre email" required>
-									<textarea name="_comment" class="input" placeholder="Votre avis" required></textarea>
-									<div class="input-rating">
-										<span>Votre note :</span>
-										<div class="stars">
-											{% for i in 5..1 %}
-												<input id="star{{ i }}" name="_rating" value="{{ i }}" type="radio"><label for="star{{ i }}"></label>
-											{% endfor %}
-										</div>
-									</div>
-									<button type="submit" class="primary-btn">Soumettre</button>
-								</form>
-							</div>
-						</div>
-						<!-- /Formulaire d'avis -->
-					</div>
-				</div>
-				<!-- /onglet3  -->
-			</div>
-			<!-- /contenu des onglets du produit  -->
-		</div>
-	</div>
-	<!-- /onglet du produit -->
+                                <!-- Formulaire d'avis -->
+                                <div class="col-md-3">
+                                    <div id="review-form">
+                                        {% if app.user %}
+                                            <form method="post" action="{{ path('submit_review', {'id': product.id}) }}" class="review-form">
+                                                <textarea name="_comment" class="input" placeholder="Votre avis" required></textarea>
+                                                <div class="input-rating">
+                                                    <span>Votre note :</span>
+                                                    <div class="stars">
+                                                        {% for i in 5..1 %}
+                                                            <input id="star{{ i }}" name="_rating" value="{{ i }}" type="radio" required>
+                                                            <label for="star{{ i }}"></label>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                                <button type="submit" class="primary-btn">Soumettre</button>
+                                            </form>
+                                        {% else %}
+                                            <p>Veuillez vous <a href="{{ path('app_login') }}">connecter</a> pour laisser un avis.</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <!-- /Formulaire d'avis -->
+                            </div>
+                        </div>
+                        <!-- /onglet3 -->
+                    </div>
+                    <!-- /contenu des onglets du produit -->
+                </div>
+            </div>
+        </div>
+        <!-- /onglet du produit -->
+    </div>
+    <!-- /conteneur -->
 </div>
-<!-- /ligne --></div><!-- /conteneur --></div><!-- /SECTION -->
+<!-- /SECTION -->

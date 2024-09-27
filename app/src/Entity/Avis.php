@@ -24,7 +24,7 @@ class Avis
     private ?\DateTimeInterface $dateNotice = null;
 
     #[ORM\Column]
-    private ?bool $isValide = null;
+    private ?bool $isValide = false;
 
     #[ORM\ManyToOne(inversedBy: 'avis')]
     #[ORM\JoinColumn(nullable: false)]
@@ -75,18 +75,17 @@ class Avis
         return $this;
     }
 
-    public function isValide(): ?bool
+    public function isValide(): bool
     {
         return $this->isValide;
     }
-
+    
     public function setValide(bool $isValide): static
     {
         $this->isValide = $isValide;
-
+    
         return $this;
     }
-
     public function getProduct(): ?Produits
     {
         return $this->product;

@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+    <h1>Liste des utilisateurs</h1>
+
+    <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary mb-3">
+        <i class="fa fa-arrow-left"></i> Retour au tableau de bord
+    </a>
+
+    <div class="mb-3">
+        <form action="{{ path('admin_users') }}" method="get" class="form-inline">
+            <label for="sort" class="mr-2">Trier par :</label>
+            <select name="sort" id="sort" class="form-control mr-2">
+                <option value="name_asc" {% if app.request.query.get('sort') == 'name_asc' %}selected{% endif %}>Nom (A-Z)</option>
+                <option value="name_desc" {% if app.request.query.get('sort') == 'name_desc' %}selected{% endif %}>Nom (Z-A)</option>
+                <option value="city_asc" {% if app.request.query.get('sort') == 'city_asc' %}selected{% endif %}>Ville (A-Z)</option>
+                <option value="city_desc" {% if app.request.query.get('sort') == 'city_desc' %}selected{% endif %}>Ville (Z-A)</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Trier</button>
+        </form>
+    </div>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Téléphone</th>
+                <th>Rôles</th>
+                <th>Nombre d'avis</th>
+                <th>Nombre de paniers</th>
+                <th>Adresses</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.lastName }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.roles|join(', ') }}</td>
+                <td>{{ user.avis|length }}</td>
+                <td>{{ user.paniers|length }}</td>
+                <td>
+                    {% if user.userAdresse|length > 0 %}
+                        {% for adresse in user.userAdresse %}
+                            <p>
+                                {{ adresse.address }}, 
+                                {{ adresse.city }}, 
+                                {{ adresse.zipCode }}, 
+                                {{ adresse.country }}
+                            </p>
+                        {% endfor %}
+                    {% else %}
+                        Aucune adresse enregistrée
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

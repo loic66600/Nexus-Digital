@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Avis;
 use App\Repository\CategorieRepository;
 use App\Repository\ProduitsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,57 +24,82 @@ class CategoriesController extends AbstractController
     #[Route('/categories', name: 'app_categories')]
     public function index(Request $request): Response
     {
-        // Récupérer toutes les catégories
         $categories = $this->categorieRepository->findAll();
-
-        // Récupérer le panier de l'utilisateur actuel
+        $categoriesWithRatings = $this->addRatingsToCategories($categories);
         $panier = $this->getPanier();
-
-        // Récupérer le nombre d'articles dans la wishlist à partir de la session
-        $session = $request->getSession();
-        $wishlistIds = $session->get('wishlist', []);
-        $wishlistCount = count($wishlistIds);
+        $wishlistCount = $this->getWishlistCount($request);
 
         return $this->render('categories/index.html.twig', [
-            'categories' => $categories,
+            'categories' => $categoriesWithRatings,
             'menuCategories' => $categories,
             'panier' => $panier,
-            'wishlistCount' => $wishlistCount, // Utiliser le signe $
+            'wishlistCount' => $wishlistCount,
         ]);
     }
 
     #[Route('/category/{id}', name: 'category_show')]
     public function show(int $id, Request $request): Response
     {
-        // Récupérer la catégorie par ID
         $category = $this->categorieRepository->findOneByIdWithProducts($id);
 
         if (!$category) {
             throw $this->createNotFoundException('No category found for id ' . $id);
         }
 
-        // Récupérer le panier de l'utilisateur actuel
+        $categoryWithRatings = $this->addRatingsToCategories([$category])[0];
         $panier = $this->getPanier();
-
-        // Récupérer le nombre d'articles dans la wishlist à partir de la session
-        $session = $request->getSession();
-        $wishlistIds = $session->get('wishlist', []);
-        $wishlistCount = count($wishlistIds);
+        $wishlistCount = $this->getWishlistCount($request);
 
         return $this->render('categories/index.html.twig', [
-            'categories' => [$category],
+            'categories' => [$categoryWithRatings],
             'menuCategories' => $this->categorieRepository->findAll(),
             'panier' => $panier,
-            'wishlistCount' => $wishlistCount, // Utiliser le signe $
+            'wishlistCount' => $wishlistCount,
         ]);
     }
 
     private function getPanier()
     {
-        // Fonction pour récupérer le panier de l'utilisateur actuel
         if ($user = $this->getUser()) {
             return method_exists($user, 'getPaniers') ? $user->getPaniers()->last() : null;
         }
         return null;
+    }
+
+    private function getWishlistCount(Request $request): int
+    {
+        $session = $request->getSession();
+        $wishlistIds = $session->get('wishlist', []);
+        return count($wishlistIds);
+    }
+
+    private function calculateAverageRating($product): float
+    {
+        $avis = $product->getAvis()->filter(function(Avis $avi) {
+            return $avi->isValide();
+        });
+        $totalNotes = array_reduce($avis->toArray(), function ($carry, Avis $avi) {
+            return $carry + $avi->getNote();
+        }, 0);
+        return count($avis) > 0 ? round($totalNotes / count($avis), 1) : 0;
+    }
+
+    private function addRatingsToCategories(array $categories): array
+    {
+        $categoriesWithRatings = [];
+        foreach ($categories as $category) {
+            $produitsWithRatings = [];
+            foreach ($category->getProduits() as $produit) {
+                $produitsWithRatings[] = [
+                    'produit' => $produit,
+                    'averageRating' => $this->calculateAverageRating($produit)
+                ];
+            }
+            $categoriesWithRatings[] = [
+                'category' => $category,
+                'produitsWithRatings' => $produitsWithRatings
+            ];
+        }
+        return $categoriesWithRatings;
     }
 }

@@ -2197,10 +2197,39 @@ textarea.input {
 input[name="_token"] {
   display: none;
 }
+/*=========================================================
+	13 -> note
+===========================================================*/
 
+.stars {
+  display: inline-block;
+  direction: rtl;
+}
 
+.stars input[type="radio"] {
+  display: none;
+}
 
+.stars label {
+  color: #bbb;
+  font-size: 18px;
+  padding: 0;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+}
 
+.stars label:before {
+  content: '\f005';
+  font-family: FontAwesome;
+}
+
+.stars input[type="radio"]:checked ~ label,
+.stars:not(:checked) > label:hover,
+.stars:not(:checked) > label:hover ~ label {
+  color: #f2b600;
+}
 
 /*=========================================================
 	14 -> RESPONSIVE
