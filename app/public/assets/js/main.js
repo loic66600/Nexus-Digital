@@ -142,20 +142,20 @@
     }
 
 
-    document.addEventListener('DOMContentLoaded', function() {
-        var toggleButton = document.getElementById('toggleUserForm');
-        var formContainer = document.getElementById('userFormContainer');
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     var toggleButton = document.getElementById('toggleUserForm');
+    //     var formContainer = document.getElementById('userFormContainer');
     
-        toggleButton.addEventListener('click', function() {
-            if (formContainer.style.display === 'none') {
-                formContainer.style.display = 'block';
-                toggleButton.textContent = 'Masquer le formulaire';
-            } else {
-                formContainer.style.display = 'none';
-                toggleButton.textContent = 'Modifier les informations';
-            }
-        });
-    });
+    //     toggleButton.addEventListener('click', function() {
+    //         if (formContainer.style.display === 'none') {
+    //             formContainer.style.display = 'block';
+    //             toggleButton.textContent = 'Masquer le formulaire';
+    //         } else {
+    //             formContainer.style.display = 'none';
+    //             toggleButton.textContent = 'Modifier les informations';
+    //         }
+    //     });
+    // });
     
 
     document.addEventListener("DOMContentLoaded", function() {

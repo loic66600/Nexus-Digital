@@ -35,12 +35,11 @@ class AccountController extends AbstractController
                 $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
                 $user->setPassword($hashedPassword);
             }
-
+        
             $entityManager->flush();
             $this->addFlash('success', 'Vos informations ont été mises à jour avec succès.');
             return $this->redirectToRoute('app_account');
         }
-
         // Initialisation des variables de formulaire
         $addressForm = null;
         $editAddressForm = null;

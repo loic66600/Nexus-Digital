@@ -38,21 +38,23 @@
                         {% endif %}
                     {% endfor %}
                     
+                    <!-- Bouton Mettre à jour -->
+                    <button type="submit" class="btn btn-primary btn-sm">Mettre à jour</button>
+
                     <!-- Champs de mot de passe -->
-                    <div class="form-group mb-2">
-                        {{ form_label(userForm.plainPassword.first, 'Nouveau mot de passe', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(userForm.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(userForm.plainPassword.first) }}
-                    </div>
-                    <div class="form-group mb-2">
-                        {{ form_label(userForm.plainPassword.second, 'Confirmer le nouveau mot de passe', {'label_attr': {'class': 'control-label'}}) }}
-                        {{ form_widget(userForm.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
-                        {{ form_errors(userForm.plainPassword.second) }}
-                    </div>
+                    {% if 'plainPassword' in userForm %}
+                        <div class="form-group mt-2">
+                            {{ form_label(userForm.plainPassword.first, 'Nouveau mot de passe', {'label_attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(userForm.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(userForm.plainPassword.first) }}
+                        </div>
+                        <div class="form-group mb-2">
+                            {{ form_label(userForm.plainPassword.second, 'Confirmer le nouveau mot de passe', {'label_attr': {'class': 'control-label'}}) }}
+                            {{ form_widget(userForm.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(userForm.plainPassword.second) }}
+                        </div>
+                    {% endif %}
                     
-                    <div class="form-group mt-3">
-                        <button type="submit" class="btn btn-primary btn-sm">Mettre à jour</button>
-                    </div>
                     {{ form_end(userForm) }}
                 </div>
             </div>
@@ -63,7 +65,7 @@
             <h5>Vos adresses</h5>
             <div class="d-flex flex-wrap">
                 {% for address in user.userAdresse %}
-                    <div class="card mb-3 shadow-sm border address-card">
+                    <div class="card mb-3 shadow-sm border address-card" style="flex: 1 1 45%; margin: 10px;">
                         <div class="card-body">
                             <h6 class="card-title">{{ address.addressName }}</h6>
                             <p>{{ address.address }}<br>{{ address.city }}, {{ address.zipCode }}<br>{{ address.country }}</p>
@@ -113,7 +115,7 @@
                                 </div>
                             {% endif %}
                         {% endfor %}
-                        <button type="submit" class="btn btn-success btn-sm">Ajouter</button>
+                        <button type="submit" class="btn btn-dark btn-sm">Ajouter</button> <!-- Bouton plus foncé -->
                         {{ form_end(addressForm) }}
                     {% endif %}
                 </div>
@@ -123,6 +125,7 @@
 </div>
 
 <script>
+// JavaScript pour afficher/masquer le formulaire
 document.addEventListener('DOMContentLoaded', function() {
     var toggleButton = document.getElementById('toggleUserForm');
     var formContainer = document.getElementById('userFormContainer');

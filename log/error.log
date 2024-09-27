@@ -1631,3 +1631,41 @@
 2024/09/26 06:22:52 [notice] 1#1: start worker process 34
 2024/09/26 06:22:52 [notice] 1#1: start worker process 35
 2024/09/26 06:22:52 [notice] 1#1: start worker process 36
+2024/09/27 06:47:22 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/27 06:47:28 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/27 06:47:33 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/27 06:47:39 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/27 06:47:46 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/27 06:47:53 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/27 06:48:01 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/27 06:48:13 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/27 06:48:31 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/27 06:49:02 [emerg] 1#1: host not found in upstream "immophp" in /etc/nginx/conf.d/default.conf:15
+2024/09/27 06:49:58 [notice] 1#1: using the "epoll" event method
+2024/09/27 06:49:58 [notice] 1#1: nginx/1.26.2
+2024/09/27 06:49:58 [notice] 1#1: built by gcc 13.2.1 20240309 (Alpine 13.2.1_git20240309) 
+2024/09/27 06:49:58 [notice] 1#1: OS: Linux 6.8.0-40-generic
+2024/09/27 06:49:58 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1024:524288
+2024/09/27 06:49:58 [notice] 1#1: start worker processes
+2024/09/27 06:49:58 [notice] 1#1: start worker process 29
+2024/09/27 06:49:58 [notice] 1#1: start worker process 30
+2024/09/27 06:49:58 [notice] 1#1: start worker process 31
+2024/09/27 06:49:58 [notice] 1#1: start worker process 32
+2024/09/27 06:49:58 [notice] 1#1: start worker process 33
+2024/09/27 06:49:58 [notice] 1#1: start worker process 34
+2024/09/27 06:49:58 [notice] 1#1: start worker process 35
+2024/09/27 06:49:58 [notice] 1#1: start worker process 36
+2024/09/27 06:50:48 [notice] 1#1: using the "epoll" event method
+2024/09/27 06:50:48 [notice] 1#1: nginx/1.26.2
+2024/09/27 06:50:48 [notice] 1#1: built by gcc 13.2.1 20240309 (Alpine 13.2.1_git20240309) 
+2024/09/27 06:50:48 [notice] 1#1: OS: Linux 6.8.0-40-generic
+2024/09/27 06:50:48 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1024:524288
+2024/09/27 06:50:48 [notice] 1#1: start worker processes
+2024/09/27 06:50:48 [notice] 1#1: start worker process 29
+2024/09/27 06:50:48 [notice] 1#1: start worker process 30
+2024/09/27 06:50:48 [notice] 1#1: start worker process 31
+2024/09/27 06:50:48 [notice] 1#1: start worker process 32
+2024/09/27 06:50:48 [notice] 1#1: start worker process 33
+2024/09/27 06:50:48 [notice] 1#1: start worker process 34
+2024/09/27 06:50:48 [notice] 1#1: start worker process 35
+2024/09/27 06:50:48 [notice] 1#1: start worker process 36

@@ -2194,7 +2194,9 @@ textarea.input {
 .bg-success {
   background-color: #1e7e34 !important; /* Vert foncé */
 }
-
+input[name="_token"] {
+  display: none;
+}
 
 
 
