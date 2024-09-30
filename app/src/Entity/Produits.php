@@ -6,6 +6,7 @@ use App\Repository\ProduitsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProduitsRepository::class)]
 class Produits
@@ -21,10 +22,11 @@ class Produits
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
+    #[Assert\NotBlank(message: "Le prix ne peut pas être vide.")]
+    #[Assert\Positive(message: "Le prix doit être positif.")]
     private ?float $prices = null;
-
-    #[ORM\Column]
+    #[ORM\Column(type: 'boolean')]
     private ?bool $isActive = null;
 
     /**
@@ -36,7 +38,7 @@ class Produits
     /**
      * @var Collection<int, Images>
      */
-    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'product')]
+    #[ORM\OneToMany(targetEntity: Images::class, mappedBy: 'product', cascade: ["persist", "remove"])]
     private Collection $images;
 
     /**
@@ -107,18 +109,16 @@ class Produits
         return $this;
     }
 
-    public function isActive(): ?bool
+    public function getIsActive(): ?bool
     {
         return $this->isActive;
     }
-
-    public function setActive(bool $isActive): static
+    public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
-
+    
         return $this;
     }
-
     /**
      * @return Collection<int, Avis>
      */
@@ -157,16 +157,15 @@ class Produits
         return $this->images;
     }
 
-    public function addImage(Images $image): static
+    public function addImage(Images $image): self
     {
         if (!$this->images->contains($image)) {
-            $this->images->add($image);
+            $this->images[] = $image;
             $image->setProduct($this);
         }
-
+    
         return $this;
     }
-
     public function removeImage(Images $image): static
     {
         if ($this->images->removeElement($image)) {

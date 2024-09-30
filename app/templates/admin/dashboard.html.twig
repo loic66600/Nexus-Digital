@@ -13,7 +13,7 @@
             </a>
 
             <div class="row justify-content-center">
-                <div class="col-md-6 mb-4">
+                <div class="col-md-4 mb-4">
                     <div class="card h-100">
                         <div class="card-body d-flex flex-column justify-content-between">
                             <h5 class="card-title">Gestion des Avis</h5>
@@ -23,7 +23,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mb-4">
+                <div class="col-md-4 mb-4">
                     <div class="card h-100">
                         <div class="card-body d-flex flex-column justify-content-between">
                             <h5 class="card-title">Gestion des Utilisateurs</h5>
@@ -33,7 +33,16 @@
                         </div>
                     </div>
                 </div>
-                {# TODO: FORMULAIRE OUR METRE DE NOUVEAU ARTICLE EN LIGNE #}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <h5 class="card-title">Ajouter un Produit</h5>
+                            <a href="{{ path('admin_produit_insert') }}" class="btn btn-primary mt-3">
+                                <i class="fa fa-plus"></i> Nouveau Produit
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
