@@ -4,15 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Avis;
 use App\Entity\User;
-use App\Entity\Produits;
+use App\Entity\Stock;
 use App\Entity\Images;
+use App\Entity\Produits;
 use App\Form\InsertProduitType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/admin')]
@@ -161,26 +162,35 @@ class AdminController extends AbstractController
                         $this->getParameter('kernel.project_dir').'/public/assets/img',
                         $newFilename
                     );
-                } catch (FileException $e) {
-                    // Gérer l'exception si quelque chose se passe mal pendant le téléchargement du fichier
-                }
     
-                $image = new Images();
-                $image->setName($newFilename);
-                $image->setProduct($produit);
-                $produit->addImage($image);
-                $this->entityManager->persist($image); // Persistez chaque image individuellement
+                    $image = new Images();
+                    $image->setName($newFilename);
+                    $image->setProduct($produit);
+                    $produit->addImage($image);
+                } catch (FileException $e) {
+                    $this->addFlash('error', "Une erreur est survenue lors du téléchargement de l'image : " . $e->getMessage());
+                }
             }
     
-            $this->entityManager->persist($produit);
-            $this->entityManager->flush();
+            // Gestion du stock
+            $stockQuantity = $form->get('stockQuantity')->getData();
+            $stock = new Stock();
+            $stock->setQuantity($stockQuantity);
+            $stock->setProduct($produit);
+            $produit->addStock($stock);
     
-            $this->addFlash('success', "Produit ajouté avec succès.");
+            try {
+                $this->entityManager->persist($produit);
+                $this->entityManager->flush();
+                $this->addFlash('success', "Produit ajouté avec succès.");
+            } catch (\Exception $e) {
+                $this->addFlash('error', "Une erreur est survenue lors de l'ajout du produit : " . $e->getMessage());
+            }
+    
             return $this->redirectToRoute("admin_produit_insert");
         }
     
         return $this->render("admin/insert.html.twig", [
             "form" => $form->createView(),
         ]);
-    }
-}
+    }   }

@@ -100,7 +100,7 @@
                     <!-- /Notes de commande -->
                 </div>
 
-               <!-- Détails de la commande -->
+<!-- Détails de la commande -->
 <div class="col-md-5 order-details">
     <div class="section-title text-center">
         <h3 class="title">Votre commande</h3>
@@ -144,30 +144,30 @@
             <input type="radio" name="payment" id="payment-1" checked>
             <label for="payment-1">
                 <span></span>
-                Virement bancaire direct
+                Paiement par carte (Stripe)
             </label>
             <div class="caption">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p>Paiement sécurisé par Stripe. Vos informations de carte ne sont jamais stockées sur nos serveurs.</p>
             </div>
         </div>
         <div class="input-radio">
-            <input type="radio" name="payment" id="payment-2">
+            <input type="radio" name="payment" id="payment-2" disabled>
             <label for="payment-2">
                 <span></span>
-                Paiement par chèque
+                Paiement par chèque (non disponible)
             </label>
             <div class="caption">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p>Cette option de paiement n'est pas disponible pour le moment.</p>
             </div>
         </div>
         <div class="input-radio">
-            <input type="radio" name="payment" id="payment-3">
+            <input type="radio" name="payment" id="payment-3" disabled>
             <label for="payment-3">
                 <span></span>
-                Système Paypal
+                Système Paypal (non disponible)
             </label>
             <div class="caption">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p>Cette option de paiement n'est pas disponible pour le moment.</p>
             </div>
         </div>
     </div>
@@ -182,10 +182,29 @@
     </div>
 
     <!-- Bouton de soumission de la commande -->
-    <a href="#" class="primary-btn order-submit">Passer la commande</a>
-
+    <a href="#" id="submit-order" class="primary-btn order-submit">Passer au paiement</a>
 </div>
 <!-- /Détails de la commande -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var submitButton = document.getElementById('submit-order');
+    var termsCheckbox = document.getElementById('terms');
+
+    submitButton.addEventListener('click', function(event) {
+        event.preventDefault();
+        if (termsCheckbox.checked) {
+            if (document.getElementById('payment-1').checked) {
+                window.location.href = "{{ path('create_checkout_session') }}";
+            } else {
+                alert('Veuillez sélectionner le paiement par carte (Stripe).');
+            }
+        } else {
+            alert('Veuillez accepter les termes et conditions avant de procéder au paiement.');
+        }
+    });
+});
+</script>
             </div>
             <!-- /ligne -->
         </div>

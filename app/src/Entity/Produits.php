@@ -44,8 +44,11 @@ class Produits
     /**
      * @var Collection<int, Stock>
      */
-    #[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'product')]
-    private Collection $stocks;
+   /**
+ * @var Collection<int, Stock>
+ */
+#[ORM\OneToMany(targetEntity: Stock::class, mappedBy: 'product', cascade: ["persist", "remove"])]
+private Collection $stocks;
 
     /**
      * @var Collection<int, LignePanier>
