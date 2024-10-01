@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats de recherche{% endblock %}
+
+{% block body %}
+    <!-- BREADCRUMB -->
+    <div id="breadcrumb" class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="breadcrumb-header">Résultats de recherche</h3>
+                    <ul class="breadcrumb-tree section-tab-nav">
+                        <li><a href="{{ path('home_index') }}">Accueil</a></li>
+                        <li>Recherche</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /BREADCRUMB -->
+
+    <!-- Messages Flash -->
+    {% for label, messages in app.flashes %}
+        <div class="container">
+            <div class="col-md-12">
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <!-- /Messages Flash -->
+
+    <!-- SECTION -->
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% if query %}
+                        <h4>Résultats pour : "{{ query }}"</h4>
+                    {% endif %}
+                    {% if selectedCategory %}
+                        <h5>Dans la catégorie : {{ selectedCategory.name }}</h5>
+                    {% endif %}
+
+                    {% if produits|length > 0 %}
+                        <div class="row">
+                            {% for produitData in produits %}
+                                {% set produit = produitData.produit %}
+                                {% set averageRating = produitData.averageRating %}
+                                <!-- product -->
+                                <div class="col-md-3 col-sm-6 col-xs-12 mb-4">
+                                    <div class="product">
+                                        <div class="product-img">
+                                            {% if produit.images|length > 0 %}
+                                                <img src="{{ asset('assets/img/' ~ produit.images[0].name) }}" alt="{{ produit.name }}" class="img-fluid">
+                                            {% else %}
+                                                <img src="{{ asset('assets/img/product01.png') }}" alt="Image par défaut" class="img-fluid">
+                                            {% endif %}
+                                        </div>
+                                        <div class="product-body">
+                                            <p class="product-category">
+                                                {% if produit.categories|length > 0 %}
+                                                    {{ produit.categories[0].name }}
+                                                {% else %}
+                                                    Non catégorisé
+                                                {% endif %}
+                                            </p>
+                                            <h3 class="product-name">
+                                        <a href="{{ path('product_show', {'id': produit.id}) }}">{{ produit.name }}</a>                                            </h3>
+                                            <h4 class="product-price">{{ produit.prices|number_format(2, ',', ' ') }} €</h4>
+                                            <div class="product-rating">
+                                                {% for i in 1..5 %}
+                                                    <i class="fa fa-star{% if i > averageRating %}-o{% endif %}" style="color: #D10024;"></i>
+                                                {% endfor %}
+                                                <span>({{ averageRating|number_format(1) }})</span>
+                                            </div>
+
+                                            <!-- Formulaire pour ajouter à la wishlist -->
+                                            <div class="product-btns">
+                                                <form action="{{ path('wishlist_add', {'id': produit.id}) }}" method="post" style="display: inline;">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('add-to-wishlist') }}">
+                                                    <button type="submit" class="add-to-wishlist" aria-label="Ajouter à la liste de souhaits">
+                                                        <i class="fa fa-heart-o"></i>
+                                                        <span class="tooltipp">Ajouter à la liste de souhaits</span>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <!-- Formulaire d'ajout au panier -->
+                                        <div class="add-to-cart">
+                                            <form action="{{ path('cart_add', {'id': produit.id}) }}" method="post" style="display: inline;">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('add-to-cart') }}">
+                                                <button type="submit" class="add-to-cart-btn btn btn-success" aria-label="Ajouter au panier">
+                                                    <i class="fa fa-shopping-cart"></i> Ajouter au panier
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /product -->
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Pagination (à implémenter si nécessaire) -->
+                        {# {% if paginator.haveToPaginate %} #}
+                        {#     {{ paginator.paginationHtml|raw }} #}
+                        {# {% endif %} #}
+                        
+                    {% else %}
+                        <p>Aucun résultat trouvé.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /SECTION -->
+{% endblock %}

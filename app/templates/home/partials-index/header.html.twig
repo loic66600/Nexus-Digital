@@ -1,201 +1,204 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <!-- EN-TÊTE -->
-    <header>
-        <!-- EN-TÊTE SUPÉRIEUR -->
-        <div id="top-header">
-            <div class="container">
-                <ul class="header-links pull-left">
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-phone"></i>
-                            +021-95-51-84
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-envelope-o"></i>
-                            email@email.com
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-map-marker"></i>
-                            1734 Rue Stonecoal
-                        </a>
-                    </li>
-                </ul>
-     
-                <ul class="header-links pull-right">
-                    {% if app.user %}
-                        <li>
-                            <span class="text-primary">Bonjour, {{ app.user.firstName }} {{ app.user.lastName }}</span>
-                        </li>
-                        <li>
-                            <a href="{{ path('app_logout') }}">
-                                <i class="fa fa-sign-out"></i>
-                                Déconnexion
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/account">
-                                <i class="fa fa-user-o"></i>
-                                Mon Compte
-                            </a>
-                        </li>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li>
-                                <a href="{{ path('admin_dashboard') }}">
-                                    <i class="fa fa-cog"></i>
-                                    Admin
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% else %}
-                        <li>
-                            <a href="{{ path('app_user_new') }}">
-                                <i class="fa fa-user-plus"></i>
-                                S'inscrire
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ path('app_login') }}">
-                                <i class="fa fa-sign-in"></i>
-                                Connexion
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-        <!-- /EN-TÊTE SUPÉRIEUR -->
+	<!-- EN-TÊTE -->
+	<header>
+		<!-- EN-TÊTE SUPÉRIEUR -->
+		<div id="top-header">
+			<div class="container">
+				<ul class="header-links pull-left">
+					<li>
+						<a href="#">
+							<i class="fa fa-phone"></i>
+							+021-95-51-84
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fa fa-envelope-o"></i>
+							email@email.com
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<i class="fa fa-map-marker"></i>
+							1734 Rue Stonecoal
+						</a>
+					</li>
+				</ul>
 
-        <!-- EN-TÊTE PRINCIPAL -->
-        <div id="header">
-            <!-- conteneur -->
-            <div class="container">
-                <!-- ligne -->
-                <div class="row">
-                    <!-- LOGO -->
-                    <div class="col-md-3">
-                        <div class="header-logo">
-                            <a href="/" class="logo">
-                                <img src="/assets/img/logo.png" alt="">
-                                Nexus Digital
-                            </a>
-                        </div>
-                    </div>
-                    <!-- /LOGO -->
+				<ul class="header-links pull-right">
+					{% if app.user %}
+						<li>
+							<span class="text-primary">Bonjour,
+								{{ app.user.firstName }}
+								{{ app.user.lastName }}</span>
+						</li>
+						<li>
+							<a href="{{ path('app_logout') }}">
+								<i class="fa fa-sign-out"></i>
+								Déconnexion
+							</a>
+						</li>
+						<li>
+							<a href="/account">
+								<i class="fa fa-user-o"></i>
+								Mon Compte
+							</a>
+						</li>
+						{% if is_granted('ROLE_ADMIN') %}
+							<li>
+								<a href="{{ path('admin_dashboard') }}">
+									<i class="fa fa-cog"></i>
+									Admin
+								</a>
+							</li>
+						{% endif %}
+					{% else %}
+						<li>
+							<a href="{{ path('app_user_new') }}">
+								<i class="fa fa-user-plus"></i>
+								S'inscrire
+							</a>
+						</li>
+						<li>
+							<a href="{{ path('app_login') }}">
+								<i class="fa fa-sign-in"></i>
+								Connexion
+							</a>
+						</li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+		<!-- /EN-TÊTE SUPÉRIEUR -->
 
-                    <!-- BARRE DE RECHERCHE -->
-                    <div class="col-md-6">
-                        <div class="header-search">
-                            <form>
-                                <select class="input-select">
-                                    <option value="0">Les Catégories</option>
-                                    <option value="1">Ordinateurs</option>
-                                    <option value="1">Smartphones</option>
-                                    <option value="1">Apareils photo</option>
-                                    <option value="1">Accessoires</option>
-                                </select>
-                                <input class="input" placeholder="Rechercher ici">
-                                <button class="search-btn">Rechercher</button>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- /BARRE DE RECHERCHE -->
+		<!-- EN-TÊTE PRINCIPAL -->
+		<div
+			id="header">
+			<!-- conteneur -->
+			<div
+				class="container">
+				<!-- ligne -->
+				<div
+					class="row">
+					<!-- LOGO -->
+					<div class="col-md-3">
+						<div class="header-logo">
+							<a href="/" class="logo">
+								<img src="/assets/img/logo.png" alt="">
 
-                    <!-- COMPTE -->
-                    <div class="col-md-3 clearfix">
-                        <div class="header-ctn">
-                            <!-- Liste de souhaits -->
-                            <div>
-                                <a href="{{ path('app_cart') }}">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span>Votre Liste</span>
-                                    <div class="qty">{{ wishlistCount }}</div>
-                                </a>
-                            </div>
-                            <!-- /Liste de souhaits -->
+							</a>
+						</div>
+					</div>
+					<!-- /LOGO -->
 
-                            <!-- Panier -->
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                    <i class="fa fa-shopping-cart"></i>
-                                    <span>Votre Panier</span>
-                                    {% if panier %}
-                                        <div class="qty">{{ panier.lignePaniers|length }}</div>
-                                    {% else %}
-                                        <div class="qty">0</div>
-                                    {% endif %}
-                                </a>
-                                <div class="cart-dropdown">
-                                    {% if panier and panier.lignePaniers|length > 0 %}
-                                        <div class="cart-list">
-                                            {% set overall_total = 0 %}
-                                            {% for lignePanier in panier.lignePaniers %}
-                                                {% set subtotal = lignePanier.product.prices * lignePanier.quantity %}
-                                                {% set overall_total = overall_total + subtotal %}
-                                                <div class="product-widget">
-                                                    <div class="product-img">
-                                                        {% if lignePanier.product.images|length > 0 %}
-                                                            <img src="{{ asset('assets/img/' ~ lignePanier.product.images[0].name) }}" alt="{{ lignePanier.product.name }}">
-                                                        {% else %}
-                                                            <img src="/assets/img/product01.png" alt="{{ lignePanier.product.name }}">
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="product-body">
-                                                        <h3 class="product-name">
-                                                            <a href="#">{{ lignePanier.product.name }}</a>
-                                                        </h3>
-                                                        <h4 class="product-price">
-                                                            <span class="qty">{{ lignePanier.quantity }}x</span>
-                                                            {{ lignePanier.product.prices }}€
-                                                        </h4>
-                                                    </div>
-                                                    <form action="{{ path('cart_remove', {'id': lignePanier.id}) }}" method="post" style="display: inline;">
-                                                        <button type="submit" class="delete">
-                                                            <i class="fa fa-close"></i>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="cart-summary">
-                                            <small>{{ panier.lignePaniers|length }} Article(s) sélectionné(s)</small>
-                                            <h5>SOUS-TOTAL: {{ overall_total }}€</h5>
-                                        </div>
-                                    {% else %}
-                                        <p>Votre panier est vide.</p>
-                                    {% endif %}
-                                    <div class="cart-btns">
-                                        <a href="{{ path('app_cart') }}">Voir Panier</a>
-                                        <a href="{{ path('app_checkout') }}">Commander
-                                            <i class="fa fa-arrow-circle-right"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /Panier -->
+					<!-- BARRE DE RECHERCHE -->
+					<div class="col-md-6">
+						<div class="header-search d-flex">
+							<form action="{{ path('search_products') }}" method="GET" id="search-form" class="d-flex w-100">
+								<select class="input-select me-2" name="category" id="category-select">
+									<option value="">Toutes les catégories</option>
+								</select>
+								<input class="input me-2" name="query" placeholder="Rechercher ici" id="search-input">
+								<button type="submit" class="search-btn">Rechercher</button>
+							</form>
+						</div>
+					</div>
+					<!-- /BARRE DE RECHERCHE -->
+					<!-- COMPTE -->
+					<div class="col-md-3 clearfix">
+						<div
+							class="header-ctn">
+							<!-- Liste de souhaits -->
+							<div>
+								<a href="{{ path('app_cart') }}">
+									<i class="fa fa-heart-o"></i>
+									<span>Votre Liste</span>
+									<div class="qty">{{ wishlistCount }}</div>
+								</a>
+							</div>
+							<!-- /Liste de souhaits -->
 
-                            <!-- Bascule Menu -->
-                            <div class="menu-toggle">
-                                <a href="#">
-                                    <i class="fa fa-bars"></i>
-                                    <span>Menu</span>
-                                </a>
-                            </div>
-                            <!-- /Bascule Menu -->
-                        </div>
-                    </div>
-                    <!-- /COMPTE -->
-                </div>
-                <!-- ligne -->
-            </div>
-            <!-- conteneur -->
-        </div>
-        <!-- /EN-TÊTE PRINCIPAL -->
-    </header>
-    <!-- /EN-TÊTE -->
+							<!-- Panier -->
+							<div class="dropdown">
+								<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+									<i class="fa fa-shopping-cart"></i>
+									<span>Votre Panier</span>
+									{% if panier %}
+										<div class="qty">{{ panier.lignePaniers|length }}</div>
+									{% else %}
+										<div class="qty">0</div>
+									{% endif %}
+								</a>
+								<div class="cart-dropdown">
+									{% if panier and panier.lignePaniers|length > 0 %}
+										<div class="cart-list">
+											{% set overall_total = 0 %}
+											{% for lignePanier in panier.lignePaniers %}
+												{% set subtotal = lignePanier.product.prices * lignePanier.quantity %}
+												{% set overall_total = overall_total + subtotal %}
+												<div class="product-widget">
+													<div class="product-img">
+														{% if lignePanier.product.images|length > 0 %}
+															<img src="{{ asset('assets/img/' ~ lignePanier.product.images[0].name) }}" alt="{{ lignePanier.product.name }}">
+														{% else %}
+															<img src="/assets/img/product01.png" alt="{{ lignePanier.product.name }}">
+														{% endif %}
+													</div>
+													<div class="product-body">
+														<h3 class="product-name">
+															<a href="#">{{ lignePanier.product.name }}</a>
+														</h3>
+														<h4 class="product-price">
+															<span class="qty">{{ lignePanier.quantity }}x</span>
+															{{ lignePanier.product.prices }}€
+														</h4>
+													</div>
+													<form action="{{ path('cart_remove', {'id': lignePanier.id}) }}" method="post" style="display: inline;">
+														<button type="submit" class="delete">
+															<i class="fa fa-close"></i>
+														</button>
+													</form>
+												</div>
+											{% endfor %}
+										</div>
+										<div class="cart-summary">
+											<small>{{ panier.lignePaniers|length }}
+												Article(s) sélectionné(s)</small>
+											<h5>SOUS-TOTAL:
+												{{ overall_total }}€</h5>
+										</div>
+									{% else %}
+										<p>Votre panier est vide.</p>
+									{% endif %}
+									<div class="cart-btns">
+										<a href="{{ path('app_cart') }}">Voir Panier</a>
+										<a href="{{ path('app_checkout') }}">Commander
+											<i class="fa fa-arrow-circle-right"></i>
+										</a>
+									</div>
+								</div>
+							</div>
+							<!-- /Panier -->
+
+							<!-- Bascule Menu -->
+							<div class="menu-toggle">
+								<a href="#">
+									<i class="fa fa-bars"></i>
+									<span>Menu</span>
+								</a>
+							</div>
+							<!-- /Bascule Menu -->
+						</div>
+					</div>
+					<!-- /COMPTE -->
+				</div>
+				<!-- ligne -->
+			</div>
+			<!-- conteneur -->
+		</div>
+		<!-- /EN-TÊTE PRINCIPAL -->
+	</header>
+	<!-- /EN-TÊTE -->
 {% endblock %}

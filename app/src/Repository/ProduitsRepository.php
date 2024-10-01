@@ -79,24 +79,23 @@ class ProduitsRepository extends ServiceEntityRepository
     }
     
     public function searchByNameAndCategory(?string $query, ?int $categoryId)
-{
-    $qb = $this->createQueryBuilder('p')
-        ->leftJoin('p.images', 'i')
-        ->addSelect('i')
-        ->leftJoin('p.categories', 'c')
-        ->addSelect('c');
-
-    if ($query) {
-        $qb->andWhere('p.name LIKE :query')
-           ->setParameter('query', '%' . $query . '%');
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.images', 'i')
+            ->addSelect('i')
+            ->leftJoin('p.categories', 'c')
+            ->addSelect('c');
+    
+        if ($query) {
+            $qb->andWhere('p.name LIKE :query')
+               ->setParameter('query', '%' . $query . '%');
+        }
+    
+        if ($categoryId) {
+            $qb->andWhere(':category MEMBER OF p.categories')
+               ->setParameter('category', $categoryId);
+        }
+    
+        return $qb->getQuery()->getResult();
     }
-
-    if ($categoryId) {
-        $qb->andWhere(':category MEMBER OF p.categories')
-           ->setParameter('category', $categoryId);
-    }
-
-    return $qb->getQuery()->getResult();
-}
-
 }

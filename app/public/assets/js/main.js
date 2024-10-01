@@ -48,6 +48,22 @@
     });
 
 
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('search-form');
+    const input = document.getElementById('search-input');
+    const select = document.getElementById('category-select');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = input.value.trim();
+        const category = select.value;
+        
+        if (query !== '' || category !== '') {
+            this.submit();
+        }
+    });
+});
+
 
 
 

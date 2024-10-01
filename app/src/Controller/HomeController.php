@@ -124,26 +124,4 @@ public function nouveauxProduits(): Response
 
     }
 
-    #[Route('/search', name: 'search_products')]
-public function searchProducts(Request $request): Response
-{
-    $query = $request->query->get('query');
-    $categoryId = $request->query->get('category');
-
-    $produits = $this->produitsRepository->searchByNameAndCategory($query, $categoryId);
-    $produitsWithRatings = $this->addRatingsToProducts($produits);
-
-    $categories = $this->categorieRepository->findAll();
-    $panier = $this->getPanier();
-    $wishlistCount = $this->getWishlistCount($request);
-
-    return $this->render('home/search_results.html.twig', [
-        'produits' => $produitsWithRatings,
-        'query' => $query,
-        'selectedCategory' => $categoryId ? $this->categorieRepository->find($categoryId)->getName() : null,
-        'categories' => $categories,
-        'panier' => $panier,
-        'wishlistCount' => $wishlistCount,
-    ]);
-}
 }

@@ -25,6 +25,7 @@ class CategoriesController extends AbstractController
     public function index(Request $request): Response
     {
         $categories = $this->categorieRepository->findAll();
+        // dd($categories);
         $categoriesWithRatings = $this->addRatingsToCategories($categories);
         $panier = $this->getPanier();
         $wishlistCount = $this->getWishlistCount($request);
@@ -102,4 +103,6 @@ class CategoriesController extends AbstractController
         }
         return $categoriesWithRatings;
     }
+
+    
 }

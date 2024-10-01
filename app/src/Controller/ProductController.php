@@ -137,4 +137,5 @@ class ProductController extends AbstractController
         $wishlistIds = $session->get('wishlist', []);
         return count($wishlistIds);
     }
+    
 }
