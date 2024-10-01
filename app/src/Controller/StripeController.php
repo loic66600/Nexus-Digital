@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Panier;
+use App\Entity\Stock;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,9 +11,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 
 class StripeController extends AbstractController
 {
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     #[Route('/create-checkout-session', name: 'create_checkout_session')]
     public function createCheckoutSession(Request $request): Response
     {
@@ -43,23 +53,45 @@ class StripeController extends AbstractController
             'payment_method_types' => ['card'],
             'line_items' => $lineItems,
             'mode' => 'payment',
-            'success_url' => $this->generateUrl('payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'success_url' => $this->generateUrl('payment_success', ['panier_id' => $panier->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
             'cancel_url' => $this->generateUrl('payment_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
         ]);
 
         return $this->redirect($session->url, 303);
     }
 
-    #[Route('/payment/success', name: 'payment_success')]
-    public function paymentSuccess(): Response
+    #[Route('/payment/success/{panier_id}', name: 'payment_success')]
+    public function paymentSuccess(int $panier_id): Response
     {
-        // Logique pour traiter le paiement réussi
+        $panier = $this->entityManager->getRepository(Panier::class)->find($panier_id);
+    
+        if (!$panier) {
+            throw $this->createNotFoundException('Panier non trouvé');
+        }
+    
+        foreach ($panier->getLignePaniers() as $lignePanier) {
+            $produit = $lignePanier->getProduct();
+            $quantiteVendue = $lignePanier->getQuantity();
+    
+            // Mise à jour du stock
+            $stock = $this->entityManager->getRepository(Stock::class)->findOneBy(['product' => $produit]);
+            if ($stock) {
+                $nouvelleQuantite = max(0, $stock->getQuantity() - $quantiteVendue);
+                $stock->setQuantity($nouvelleQuantite);
+                $this->entityManager->persist($stock);
+            }
+    
+            // Supprimer la ligne de panier
+            $this->entityManager->remove($lignePanier);
+        }
+    
+        // Maintenant, supprimer le panier
+        $this->entityManager->remove($panier);
+        $this->entityManager->flush();
+    
         $this->addFlash('success', 'Paiement réussi ! Votre commande a été traitée.');
-        
-        // Redirection vers la page d'accueil
         return $this->redirectToRoute('home_index');
     }
-
     #[Route('/payment/cancel', name: 'payment_cancel')]
     public function paymentCancel(): Response
     {
@@ -69,9 +101,8 @@ class StripeController extends AbstractController
 
     private function getPanier()
     {
-        // Utilisez la même logique que dans votre CheckoutController
         if ($user = $this->getUser()) {
-            return method_exists($user, 'getPaniers') ? $user->getPaniers()->last() : null;
+            return $user->getPaniers()->last();
         }
         return null;
     }

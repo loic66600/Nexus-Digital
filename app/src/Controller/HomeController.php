@@ -47,7 +47,22 @@ class HomeController extends AbstractController
             'wishlistCount' => $wishlistCount,
         ]);
     }
-    #[Route('/home-categorie/{id}', name: 'app_home_category')]
+
+// Dans HomeController.php
+
+// Dans HomeController.php
+
+#[Route('/nouveaux-produits', name: 'nouveaux_produits')]
+public function nouveauxProduits(): Response
+{
+    $produits = $this->produitsRepository->findAllOrderedByIdDesc();
+    $produitsWithRatings = $this->addRatingsToProducts($produits);
+
+    return $this->render('home/newproducte.html.twig', [
+        'produits' => array_slice($produitsWithRatings, 0, 10), // Limite à 10 produits récents
+        'categories' => $this->categorieRepository->findAll(),
+    ]);
+}    #[Route('/home-categorie/{id}', name: 'app_home_category')]
     public function category(int $id, Request $request): Response
     {
         $category = $this->categorieRepository->findOneById($id);
@@ -108,4 +123,27 @@ class HomeController extends AbstractController
         return $produitsWithRatings;
 
     }
+
+    #[Route('/search', name: 'search_products')]
+public function searchProducts(Request $request): Response
+{
+    $query = $request->query->get('query');
+    $categoryId = $request->query->get('category');
+
+    $produits = $this->produitsRepository->searchByNameAndCategory($query, $categoryId);
+    $produitsWithRatings = $this->addRatingsToProducts($produits);
+
+    $categories = $this->categorieRepository->findAll();
+    $panier = $this->getPanier();
+    $wishlistCount = $this->getWishlistCount($request);
+
+    return $this->render('home/search_results.html.twig', [
+        'produits' => $produitsWithRatings,
+        'query' => $query,
+        'selectedCategory' => $categoryId ? $this->categorieRepository->find($categoryId)->getName() : null,
+        'categories' => $categories,
+        'panier' => $panier,
+        'wishlistCount' => $wishlistCount,
+    ]);
+}
 }

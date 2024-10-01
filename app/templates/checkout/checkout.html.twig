@@ -13,42 +13,45 @@
 <!-- Détails de facturation -->
 <div class="billing-details">
     <div class="section-title">
-        <h3 class="title">Recapitulatif de facturation</h3>
+        <h3 class="title">Récapitulatif de facturation</h3>
     </div>
     <div class="form-group">
-        <input class="input" type="text" name="first-name" placeholder="Prénom" value="{{ app.user.firstName ?? '' }}">
+        <label for="first-name">Prénom</label>
+        <input class="input" type="text" id="first-name" value="{{ app.user.firstName ?? '' }}" readonly>
     </div>
     <div class="form-group">
-        <input class="input" type="text" name="last-name" placeholder="Nom de famille" value="{{ app.user.lastName ?? '' }}">
+        <label for="last-name">Nom de famille</label>
+        <input class="input" type="text" id="last-name" value="{{ app.user.lastName ?? '' }}" readonly>
     </div>
     <div class="form-group">
-        <input class="input" type="email" name="email" placeholder="Email" value="{{ app.user.email ?? '' }}">
+        <label for="email">Email</label>
+        <input class="input" type="email" id="email" value="{{ app.user.email ?? '' }}" readonly>
     </div>
     <div class="form-group">
-        <input class="input" type="text" name="address" placeholder="Adresse" value="{{ app.user.address ?? '' }}">
+        <label for="phone">Téléphone</label>
+        <input class="input" type="tel" id="phone" value="{{ app.user.phone ?? '' }}" readonly>
     </div>
-    <div class="form-group">
-        <input class="input" type="text" name="city" placeholder="Ville" value="{{ app.user.city ?? '' }}">
-    </div>
-    <div class="form-group">
-        <input class="input" type="text" name="country" placeholder="Pays" value="{{ app.user.country ?? '' }}">
-    </div>
-    <div class="form-group">
-        <input class="input" type="text" name="zip-code" placeholder="Code Postal" value="{{ app.user.zipCode ?? '' }}">
-    </div>
-    <div class="form-group">
-        <input class="input" type="tel" name="tel" placeholder="Téléphone" value="{{ app.user.phoneNumber ?? '' }}">
-    </div>
-    <div class="form-group">
-        <div class="input-checkbox">
-        
-            <label for="create-account">
-               
-                Changer de compte?
-            </label>
     
+    {% if userAddress %}
+        <div class="form-group">
+            <label for="address">Adresse</label>
+            <input class="input" type="text" id="address" value="{{ userAddress.address ?? '' }}" readonly>
         </div>
-    </div>
+        <div class="form-group">
+            <label for="city">Ville</label>
+            <input class="input" type="text" id="city" value="{{ userAddress.city ?? '' }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="country">Pays</label>
+            <input class="input" type="text" id="country" value="{{ userAddress.country ?? '' }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="zip-code">Code Postal</label>
+            <input class="input" type="text" id="zip-code" value="{{ userAddress.zipCode ?? '' }}" readonly>
+        </div>
+    {% else %}
+        <p>Aucune adresse enregistrée.</p>
+    {% endif %}
 </div>
 <!-- /Détails de facturation -->
 
@@ -64,40 +67,44 @@
             Expédier à une adresse différente ?
         </label>
         <div class="caption">
-            <div class="form-group">
-                <input class="input" type="text" name="shipping-first-name" placeholder="Prénom" value="{{ app.user.shippingFirstName ?? '' }}">
-            </div>
-            <div class="form-group">
-                <input class="input" type="text" name="shipping-last-name" placeholder="Nom de famille" value="{{ app.user.shippingLastName ?? '' }}">
-            </div>
-            <div class="form-group">
-                <input class="input" type="email" name="shipping-email" placeholder="Email" value="{{ app.user.shippingEmail ?? '' }}">
-            </div>
-            <div class="form-group">
-                <input class="input" type="text" name="shipping-address" placeholder="Adresse" value="{{ app.user.shippingAddress ?? '' }}">
-            </div>
-            <div class="form-group">
-                <input class="input" type="text" name="shipping-city" placeholder="Ville" value="{{ app.user.shippingCity ?? '' }}">
-            </div>
-            <div class="form-group">
-                <input class="input" type="text" name="shipping-country" placeholder="Pays" value="{{ app.user.shippingCountry ?? '' }}">
-            </div>
-            <div class="form-group">
-                <input class="input" type="text" name="shipping-zip-code" placeholder="Code Postal" value="{{ app.user.shippingZipCode ?? '' }}">
-            </div>
-            <div class="form-group">
-                <input class="input" type="tel" name="shipping-tel" placeholder="Téléphone" value="{{ app.user.shippingPhoneNumber ?? '' }}">
-            </div>
+            <form action="{{ path('app_add_shipping_address') }}" method="post">
+                <div class="form-group">
+                    <input class="input" type="text" name="shipping_first_name" placeholder="Prénom" required>
+                </div>
+                <div class="form-group">
+                    <input class="input" type="text" name="shipping_last_name" placeholder="Nom de famille" required>
+                </div>
+                <div class="form-group">
+                    <input class="input" type="email" name="shipping_email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input class="input" type="text" name="shipping_address" placeholder="Adresse" required>
+                </div>
+                <div class="form-group">
+                    <input class="input" type="text" name="shipping_city" placeholder="Ville" required>
+                </div>
+                <div class="form-group">
+                    <input class="input" type="text" name="shipping_country" placeholder="Pays" required>
+                </div>
+                <div class="form-group">
+                    <input class="input" type="text" name="shipping_zip_code" placeholder="Code Postal" required>
+                </div>
+                <div class="form-group">
+                    <input class="input" type="tel" name="shipping_phone" placeholder="Téléphone" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="primary-btn">Ajouter cette adresse de livraison</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 <!-- /Détails de livraison -->
-
-                    <!-- Notes de commande -->
+                    {# <!-- Notes de commande -->
                     <div class="order-notes">
                         <textarea class="input" placeholder="Notes de commande"></textarea>
                     </div>
-                    <!-- /Notes de commande -->
+                    <!-- /Notes de commande --> #}
                 </div>
 
 <!-- Détails de la commande -->
@@ -182,7 +189,7 @@
     </div>
 
     <!-- Bouton de soumission de la commande -->
-<a href="{{ path('create_checkout_session') }}" class="btn btn-primary">Procéder au paiement</a></div>
+<a href="{{ path('create_checkout_session') }}" class="primary-btn cta-btn">Procéder au paiement</a></div>
 <!-- /Détails de la commande -->
 
 <script>
