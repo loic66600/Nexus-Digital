@@ -2,33 +2,22 @@
 
 namespace App\Controller;
 
-use App\Service\CartService;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Stripe\Checkout\Session;
-use Stripe\Stripe;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class StripeController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private CartService $cartService;
-
-    public function __construct(EntityManagerInterface $entityManager, CartService $cartService)
-    {
-        $this->entityManager = $entityManager;
-        $this->cartService = $cartService;
-    }
-
     #[Route('/create-checkout-session', name: 'create_checkout_session')]
-    public function createCheckoutSession(): Response
+    public function createCheckoutSession(Request $request): Response
     {
-        $cart = $this->cartService->getFullCart();
-
-        if (empty($cart)) {
+        $panier = $this->getPanier();
+        
+        if (!$panier || $panier->getLignePaniers()->isEmpty()) {
             $this->addFlash('error', 'Votre panier est vide.');
             return $this->redirectToRoute('app_checkout');
         }
@@ -36,16 +25,17 @@ class StripeController extends AbstractController
         Stripe::setApiKey($_ENV['STRIPE_SECRET_KEY']);
 
         $lineItems = [];
-        foreach ($cart as $item) {
+        foreach ($panier->getLignePaniers() as $lignePanier) {
+            $produit = $lignePanier->getProduct();
             $lineItems[] = [
                 'price_data' => [
                     'currency' => 'eur',
                     'product_data' => [
-                        'name' => $item['produit']->getNom(),
+                        'name' => $produit->getName(),
                     ],
-                    'unit_amount' => $item['produit']->getPrix() * 100, // Stripe utilise les centimes
+                    'unit_amount' => $produit->getPrices() * 100, // Stripe utilise les centimes
                 ],
-                'quantity' => $item['quantite'],
+                'quantity' => $lignePanier->getQuantity(),
             ];
         }
 
@@ -61,18 +51,28 @@ class StripeController extends AbstractController
     }
 
     #[Route('/payment/success', name: 'payment_success')]
-    public function paymentSuccess(Request $request): Response
+    public function paymentSuccess(): Response
     {
         // Logique pour traiter le paiement réussi
-        $this->cartService->clearCart();
         $this->addFlash('success', 'Paiement réussi ! Votre commande a été traitée.');
-        return $this->redirectToRoute('confirmation_commande');
+        
+        // Redirection vers la page d'accueil
+        return $this->redirectToRoute('home_index');
     }
 
     #[Route('/payment/cancel', name: 'payment_cancel')]
     public function paymentCancel(): Response
     {
         $this->addFlash('error', 'Le paiement a été annulé.');
-        return $this->redirectToRoute('panier');
+        return $this->redirectToRoute('app_checkout');
+    }
+
+    private function getPanier()
+    {
+        // Utilisez la même logique que dans votre CheckoutController
+        if ($user = $this->getUser()) {
+            return method_exists($user, 'getPaniers') ? $user->getPaniers()->last() : null;
+        }
+        return null;
     }
 }

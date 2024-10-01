@@ -150,7 +150,7 @@
                 <p>Paiement sécurisé par Stripe. Vos informations de carte ne sont jamais stockées sur nos serveurs.</p>
             </div>
         </div>
-        <div class="input-radio">
+        {# <div class="input-radio">
             <input type="radio" name="payment" id="payment-2" disabled>
             <label for="payment-2">
                 <span></span>
@@ -159,7 +159,7 @@
             <div class="caption">
                 <p>Cette option de paiement n'est pas disponible pour le moment.</p>
             </div>
-        </div>
+        </div> #}
         <div class="input-radio">
             <input type="radio" name="payment" id="payment-3" disabled>
             <label for="payment-3">
@@ -182,8 +182,7 @@
     </div>
 
     <!-- Bouton de soumission de la commande -->
-    <a href="#" id="submit-order" class="primary-btn order-submit">Passer au paiement</a>
-</div>
+<a href="{{ path('create_checkout_session') }}" class="btn btn-primary">Procéder au paiement</a></div>
 <!-- /Détails de la commande -->
 
 <script>
