@@ -8,11 +8,11 @@
         <i class="fa fa-arrow-left"></i> Retour au tableau de bord
     </a>
 
-    {% for message in app.flashes('success') %}
+    {# {% for message in app.flashes('success') %}
         <div class="alert alert-success">
             {{ message }}
         </div>
-    {% endfor %}
+    {% endfor %} #}
 
     <div class="mb-3">
         <form action="{{ path('admin_avis') }}" method="get" class="form-inline">

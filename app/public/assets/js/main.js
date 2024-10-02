@@ -157,22 +157,6 @@
             updatePriceSlider($(this).parent(), this.value);
         });
     }
-
-
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     var toggleButton = document.getElementById('toggleUserForm');
-    //     var formContainer = document.getElementById('userFormContainer');
-    
-    //     toggleButton.addEventListener('click', function() {
-    //         if (formContainer.style.display === 'none') {
-    //             formContainer.style.display = 'block';
-    //             toggleButton.textContent = 'Masquer le formulaire';
-    //         } else {
-    //             formContainer.style.display = 'none';
-    //             toggleButton.textContent = 'Modifier les informations';
-    //         }
-    //     });
-    // });
     
 
     document.addEventListener("DOMContentLoaded", function() {
@@ -186,6 +170,48 @@
             });
         }, 5000); // 5000 ms = 5 seconds
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var flashMessages = document.getElementById('flash-messages');
+        if (flashMessages && flashMessages.children.length > 0) {
+            setTimeout(function() {
+                flashMessages.style.transition = 'opacity 1s ease-out';
+                flashMessages.style.opacity = '0';
+                setTimeout(function() {
+                    flashMessages.remove();
+                }, 1000);
+            }, 5000);
+        }
+    });
+
     
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const endTime = now + (10 * 24 * 60 * 60 * 1000); // 10 jours en millisecondes
+        
+        function calculate() {
+            const currentTime = new Date().getTime();
+            const difference = endTime - currentTime;
+    
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+    
+            if (difference < 0) {
+                updateCountdown(); // Redémarrer le compte à rebours
+            }
+        }
+    
+        calculate();
+        setInterval(calculate, 1000);
+    }
+    
+    updateCountdown();
 
 })(jQuery);
