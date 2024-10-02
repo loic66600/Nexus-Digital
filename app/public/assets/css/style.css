@@ -2235,7 +2235,7 @@ input[name="_token"] {
   border-radius: 40px 0 0 40px;
   border: none;
   padding: 10px;
-  width: calc(100% - 90px); /* Ajustez pour correspondre à la taille du bouton */
+  width: 400px; /* Ajustez pour correspondre à la taille du bouton */
 }
 
 .search-btn {
@@ -2292,7 +2292,26 @@ input[name="_token"] {
   .body{
     font-size:larger
   }
-  
+  #header .row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.header-logo, .header-search, .header-ctn {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.header-search {
+    display: flex;
+    justify-content: center;
+}
+
+.input, .search-btn {
+    width: 80%;
+    max-width: 300px;
+}  
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   /* .products-slick {
@@ -2345,6 +2364,12 @@ input[name="_token"] {
   .section-tab-nav li {
     margin-top: 10px;
   }
+  .input, .search-btn {
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 40px; /* Arrondir tous les côtés pour mobile */
+}
+  
 }
 
 @media only screen and (max-width: 480px) {
