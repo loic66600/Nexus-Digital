@@ -185,6 +185,8 @@
     });
 
     
+
+    
     function updateCountdown() {
         const now = new Date().getTime();
         const endTime = now + (10 * 24 * 60 * 60 * 1000); // 10 jours en millisecondes
