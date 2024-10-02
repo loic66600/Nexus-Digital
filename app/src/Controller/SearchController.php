@@ -25,32 +25,25 @@ class SearchController extends AbstractController
     public function searchProducts(Request $request): Response
     {
         $query = $request->query->get('query');
-        $categoryId = $request->query->get('category');
+    
+        // Recherchez uniquement par nom
+        $produits = $this->produitsRepository->searchByName($query);
         
-        // Convertir $categoryId en entier ou null
-        $categoryId = $categoryId !== '' ? (int)$categoryId : null;
-    
-        $produits = $this->produitsRepository->searchByNameAndCategory($query, $categoryId);
         $produitsWithRatings = $this->addRatingsToProducts($produits);
-    
         $categories = $this->categorieRepository->findAll();
-        // dd($categories);
-        $selectedCategory = $categoryId ? $this->categorieRepository->find($categoryId) : null;
-    
         $panier = $this->getPanier();
         $wishlistCount = $this->getWishlistCount($request);
     
         return $this->render('search/index.html.twig', [
             'produits' => $produitsWithRatings,
             'query' => $query,
-            'selectedCategory' => $selectedCategory,
             'categories' => $categories,
             'panier' => $panier,
             'wishlistCount' => $wishlistCount,
         ]);
-    }
 
-    private function addRatingsToProducts(array $produits): array
+        
+    }    private function addRatingsToProducts(array $produits): array
     {
         $produitsWithRatings = [];
         foreach ($produits as $produit) {

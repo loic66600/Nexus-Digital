@@ -98,4 +98,14 @@ class ProduitsRepository extends ServiceEntityRepository
     
         return $qb->getQuery()->getResult();
     }
+    public function searchByName(?string $query)
+{
+    return $this->createQueryBuilder('p')
+        ->leftJoin('p.images', 'i')
+        ->addSelect('i')
+        ->where('p.name LIKE :query')
+        ->setParameter('query', '%' . $query . '%')
+        ->getQuery()
+        ->getResult();
+}
 }

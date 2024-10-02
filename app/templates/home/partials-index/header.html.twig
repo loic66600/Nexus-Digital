@@ -93,20 +93,17 @@
 					</div>
 					<!-- /LOGO -->
 
-					<!-- BARRE DE RECHERCHE -->
-					<div class="col-md-6">
-						<div class="header-search d-flex">
-							<form action="{{ path('search_products') }}" method="GET" id="search-form" class="d-flex w-100">
-								<select class="input-select me-2" name="category" id="category-select">
-									<option value="">Toutes les catégories</option>
-								</select>
-								<input class="input me-2" name="query" placeholder="Rechercher ici" id="search-input">
-								<button type="submit" class="search-btn">Rechercher</button>
-							</form>
-						</div>
-					</div>
-					<!-- /BARRE DE RECHERCHE -->
-					<!-- COMPTE -->
+<!-- BARRE DE RECHERCHE -->
+<div class="col-md-6">
+    <div class="header-search d-flex">
+        <form action="{{ path('search_products') }}" method="GET" id="search-form" class="d-flex w-100">
+            <input class="input me-2 flex-grow-1" name="query" placeholder="Rechercher ici" id="search-input" style="border-radius: 40px 0 0 40px;">
+            <button type="submit" class="search-btn" style="border-radius: 0 40px 40px 0;">Rechercher</button>
+        </form>
+    </div>
+</div>
+<!-- /BARRE DE RECHERCHE -->
+<!-- COMPTE -->
 					<div class="col-md-3 clearfix">
 						<div
 							class="header-ctn">

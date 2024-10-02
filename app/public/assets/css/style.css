@@ -475,7 +475,7 @@ textarea.input {
 }
 
 .header-search form .input {
-  width: calc(100% - 260px);
+  /* width: calc(100% - 260px); */
   margin-right: -4px;
 }
 
@@ -2231,8 +2231,20 @@ input[name="_token"] {
 .stars:not(:checked) > label:hover ~ label {
   color: #f2b600;
 }
+.input {
+  border-radius: 40px 0 0 40px;
+  border: none;
+  padding: 10px;
+  width: calc(100% - 90px); /* Ajustez pour correspondre à la taille du bouton */
+}
 
-
+.search-btn {
+  border-radius: 0 40px 40px 0;
+  background-color: #D10024; /* Couleur rouge du bouton */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+}
 /*=========================================================
 	14 -> RESPONSIVE
 ===========================================================*/

@@ -48,26 +48,21 @@
     });
 
 
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('search-form');
-    const input = document.getElementById('search-input');
-    const select = document.getElementById('category-select');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const query = input.value.trim();
-        const category = select.value;
-        
-        if (query !== '' || category !== '') {
-            this.submit();
-        }
-    });
-});
-
-
-
-
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('search-form');
+        const input = document.getElementById('search-input');
     
+        if (form && input) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const query = input.value.trim();
+    
+                if (query !== '') {
+                    form.submit();
+                }
+            });
+        }
+    });    
     // Products Widget Slick
     $('.products-widget-slick').each(function() {
         var $this = $(this),
