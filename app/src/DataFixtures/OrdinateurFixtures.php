@@ -2,17 +2,34 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Produits;
-use App\Entity\Categorie;
 use App\Entity\Stock;
 use App\Entity\Images;
-use Doctrine\Bundle\FixturesBundle\Fixture;
+use App\Entity\Status;
+use App\Entity\Produits;
+use App\Entity\Categorie;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class OrdinateurFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+
+         // Ajoutez cette section pour créer le statut "Pending"
+         $pendingStatus = new Status();
+         $pendingStatus->setLabel('Pending');
+         $manager->persist($pendingStatus);
+
+
+        // Vous pouvez ajouter d'autres statuts si nécessaire
+        $statuses = ['Processing', 'Shipped', 'Delivered', 'Cancelled'];
+        foreach ($statuses as $statusLabel) {
+            $status = new Status();
+            $status->setLabel($statusLabel);
+            $manager->persist($status);
+        }
+
+
         // Créer des catégories
         $categoriesData = [
             'Ordinateurs Portables' => 'Catégorie pour les ordinateurs portables',
@@ -68,7 +85,7 @@ class OrdinateurFixtures extends Fixture
             $product->setName($productData['name']);
             $product->setDescription($productData['description']);
             $product->setPrices($productData['prices']);
-            $product->setActive(true);
+            $product->setIsActive(true);
 
             // Associer le produit à la catégorie appropriée
             $product->addCategory($categories[$productData['category']]);

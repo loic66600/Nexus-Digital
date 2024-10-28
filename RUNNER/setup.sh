@@ -27,6 +27,9 @@ yes | docker exec -it phpimmo composer require fakerphp/faker --dev
 # Require stripe/stripe-php
 yes | docker exec -it phpimmo composer require stripe/stripe-php
 
+#permission
+sudo chmod -R 777 ./
+
 # Run doctrine migrations to construct the database
 docker exec -it phpimmo bin/console doctrine:migrations:migrate --no-interaction
 
