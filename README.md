@@ -1,4 +1,4 @@
-# 🛍️ Nexus Digital - Site de Vente de Produits High-Tech
+# 🎧 Nexus Digital - Site de Vente de Produits High-Tech
 
 Bienvenue sur Nexus Digital, votre plateforme de vente en ligne pour les produits high-tech de dernière génération. Ce projet utilise Symfony et Docker pour offrir une expérience utilisateur fluide et performante.
 
@@ -8,8 +8,6 @@ Bienvenue sur Nexus Digital, votre plateforme de vente en ligne pour les produit
 
 - Docker
 - Docker Compose
-
-### Installation Initiale
 
 1. Clonez le dépôt du projet sur votre machine locale.
 2. Naviguez vers le dossier du projet.
@@ -33,6 +31,7 @@ Bienvenue sur Nexus Digital, votre plateforme de vente en ligne pour les produit
    docker exec -it phpimmo composer require fakerphp/faker --dev
    docker exec -it phpimmo composer require stripe/stripe-php
    ```
+### Installation Initiale
 
 ## 🐳 Commandes Docker Courantes
 
