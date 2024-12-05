@@ -10,7 +10,7 @@ Bienvenue sur Nexus Digital, votre plateforme de vente en ligne pour les produit
 - Docker Compose
 
 1. Clonez le dépôt du projet sur votre machine locale.
-2. Naviguez vers le dossier du projet.
+2. Naviguez vers le dossier du projet et ajouer votre .env
 3. Ouvrez un terminal et exécutez les commandes suivantes pour donner les permissions d'exécution aux scripts :
    ```bash
    chmod +x setup.sh
