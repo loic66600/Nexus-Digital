@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
+
 use App\Entity\Produits;
 use App\Entity\UserInfo;
+use App\Entity\Categorie;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,6 +63,10 @@ class CheckoutController extends AbstractController
         // Récupérer l'adresse principale de l'utilisateur
         $userAddress = $user->getUserAdresse()->first();
 
+         // Récupérer les catégories
+         $categories = $entityManager->getRepository(Categorie::class)->findAll();
+
+
         return $this->render('checkout/index.html.twig', [
             'user' => $user,
             'userAddress' => $userAddress,
@@ -69,6 +75,7 @@ class CheckoutController extends AbstractController
             'panier' => $panier,
             'wishlistCount' => $wishlistCount,
             'wishlistProducts' => $wishlistProducts,
+            'menuCategories' => $categories,  
         ]);
     }
 

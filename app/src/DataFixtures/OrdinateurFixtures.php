@@ -53,11 +53,11 @@ class OrdinateurFixtures extends Fixture
             // Ordinateurs Portables
             ['name' => 'HP Spectre x360', 'description' => 'Ordinateur convertible élégant.', 'prices' => 1799.99, 'category' => 'Ordinateurs Portables', 'quantity' => 10, 'images' => ['HP Spectre x360.jpg', 'HP Spectre x360.1.jpg', 'HP Spectre x360.2.jpg']],
             ['name' => 'Lenovo ThinkPad X1 Carbon', 'description' => 'Durabilité et performance.', 'prices' => 2299.99, 'category' => 'Ordinateurs Portables', 'quantity' => 12, 'images' => ['Lenovo ThinkPad X1 Carbon.1.jpg', 'Lenovo ThinkPad X1 Carbon.2.jpg', 'Lenovo ThinkPad X1 Carbon.jpg']],
-            ['name' => 'Asus ROG Zephyrus G14', 'description' => 'Gaming puissant et portable.', 'prices' => 1999.99, 'category' => 'Ordinateurs Portables', 'quantity' => 8, 'images' => ['Asus ROG Zephyrus G14.jpg', 'Asus ROG Zephyrus G14.1.jpg', 'Asus ROG Zephyrus G14-2.jpg']],
+            ['name' => 'Asus ROG Zephyrus G14', 'description' => 'Gaming puissant et portable.', 'prices' => 1999.99, 'category' => 'Ordinateurs Portables', 'quantity' => 8, 'images' => ['Asus ROG Zephyrus G14.jpg', 'Asus ROG Zephyrus G14.1.jpg', 'Asus ROG Zephyrus G14.2.jpg']],
             ['name' => 'Microsoft Surface Laptop 4', 'description' => 'Polyvalent et élégant.', 'prices' => 1499.99, 'category' => 'Ordinateurs Portables', 'quantity' => 25, 'images' => ['Microsoft Surface Laptop 4.jpg', 'Microsoft Surface Laptop 4.1.jpg', 'Microsoft Surface Laptop 4.2.jpg']],
         
             // Smartphones
-            ['name' => 'iPhone 14 Pro', 'description' => 'Dernier smartphone par Apple.', 'prices' => 999.99, 'category' => 'Smartphones', 'quantity' => 30, 'images' => ['iPhone 14 Pro.webp', 'iPhone 14 Pro.1.webp', 'iPhone 14 Pro.2.webp']],
+            ['name' => 'iPhone 14 Pro', 'description' => 'Dernier smartphone par Apple.', 'prices' => 999.99, 'category' => 'Smartphones', 'quantity' => 30, 'images' => ['iPhone 14 Pro.webp', 'iPhone 14 Pro.1.jpg', 'iPhone 14 Pro.2.jpg']],
             ['name' => 'Samsung Galaxy S23', 'description' => 'Smartphone de pointe.', 'prices' => 1199.99, 'category' => 'Smartphones', 'quantity' => 20, 'images' => ['Samsung Galaxy S23.1.jpg', 'Samsung Galaxy S23.2.jpg', 'Samsung Galaxy S23.jpg']],
             ['name' => 'Google Pixel 7', 'description' => 'Smartphone par Google.', 'prices' => 899.99, 'category' => 'Smartphones', 'quantity' => 18, 'images' => ['Google Pixel 7.jpg', 'Google Pixel 7.1.jpg', 'Google Pixel 7.2.jpg']],
             ['name' => 'OnePlus 10 Pro', 'description' => 'Performance et design.', 'prices' => 799.99, 'category' => 'Smartphones', 'quantity' => 22, 'images' => ['OnePlus 10 Pro.jpg', 'OnePlus 10 Pro.1.jpg', 'OnePlus 10 Pro.2.jpg']],

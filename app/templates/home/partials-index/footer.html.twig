@@ -1,101 +1,162 @@
 <!-- PIED DE PAGE -->
-<footer id="footer">
-    <!-- haut du pied de page -->
-    <div class="section">
-        <!-- conteneur -->
-        <div class="container">
-            <!-- ligne -->
-            <div class="row">
-                <div class="col-md-6 col-sm-6">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            <div class="footer">
-                                <h3 class="footer-title">À propos de nous</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
-                                <ul class="footer-links">
-                                    <li>
-                                        <a href="#"><i class="fa fa-map-marker"></i>1734 Rue Stonecoal</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="footer">
-                                <h3 class="footer-title">Catégories</h3>
-                                <ul class="footer-links">
-                                    <li><a href="/category/1">Ordinateurs portables</a></li>
-                                    <li><a href="/category/2">Smartphones</a></li>
-                                    <li><a href="/category/3">Appareils photo</a></li>
-                                    <li><a href="/category/4">Accessoires</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-sm-6">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            <div class="footer">
-                                <h3 class="footer-title">Informations</h3>
-                                <ul class="footer-links">
-                                    <li><a href="#">À propos de nous</a></li>
-                                    <li><a href="#">Nous contacter</a></li>
-                                    <li><a href="#">Politique de confidentialité</a></li>
-                                    <li><a href="#">Commandes et retours</a></li>
-                                    <li><a href="#">Conditions générales</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-sm-6">
-                            <div class="footer">
-                                <h3 class="footer-title">Service</h3>
-                                <ul class="footer-links">
-                                    <li><a href="/account">Mon compte</a></li>
-                                    <li><a href="/cart">Voir le panier</a></li>
-                                    <li><a href="/cart">Liste de souhaits</a></li>
-                                    <li><a href="#">Suivre ma commande</a></li>
-                                    <li><a href="#">Aide</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /ligne -->
-        </div>
-        <!-- /conteneur -->
-    </div>
-    <!-- /haut du pied de page -->
+<footer
+	id="footer">
+	<!-- haut du pied de page -->
+	<div
+		class="section">
+		<!-- conteneur -->
+		<div
+			class="container">
+			<!-- ligne -->
+			<div class="row">
+				<div class="col-md-6 col-sm-6">
+					<div class="row">
+						<div class="col-md-6 col-sm-6">
+							<div class="footer">
+								<h3 class="footer-title">À propos de nous</h3>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+								<ul class="footer-links">
+									<li>
+										<a href="#">
+											<i class="fa fa-map-marker"></i>1734 Rue Stonecoal</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="fa fa-phone"></i>+021-95-51-84</a>
+									</li>
+									<li>
+										<a href="#">
+											<i class="fa fa-envelope-o"></i>email@email.com</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div
+							class="col-md-6 col-sm-6">
+							<!-- templates/footer.html.twig -->
 
-    <!-- bas du pied de page -->
-    <div id="bottom-footer" class="section">
-        <div class="container">
-            <!-- ligne -->
-            <div class="row">
-                <div class="col-md-12 text-center">
-                    <ul class="footer-payments">
-                        <li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
-                        <li><a href="#"><i class="fa fa-credit-card"></i></a></li>
-                        <li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
-                        <li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
-                        <li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
-                        <li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
-                    </ul>
-                    <span class="copyright">
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> Tous droits réservés | Ce site est créé avec <i class="fa fa-heart-o" aria-hidden="true"></i> par <a href="https://loic66600.github.io/Portfolio-personel/" target="_blank">ROSSIGNOL</a>
-                    </span>
-                </div>
-            </div>
-            <!-- /ligne -->
-        </div>
-        <!-- /conteneur -->
-    </div>
-    <!-- /bas du pied de page -->
+							<div class="footer">
+								<h3 class="footer-title">Catégories</h3>
+								<ul class="footer-links">
+									{% for category in menuCategories %}
+										<li>
+											<a href="{{ path('category_show', {'id': category.id}) }}">{{ category.name }}</a>
+										</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6">
+					<div class="row">
+						<div class="col-md-6 col-sm-6">
+							<div class="footer">
+								<h3 class="footer-title">Informations</h3>
+								<ul class="footer-links">
+									<li>
+										<a href="#">À propos de nous</a>
+									</li>
+									<li>
+										<a href="#">Nous contacter</a>
+									</li>
+									<li>
+										<a href="#">Politique de confidentialité</a>
+									</li>
+									<li>
+										<a href="#">Commandes et retours</a>
+									</li>
+									<li>
+										<a href="#">Conditions générales</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="col-md-6 col-sm-6">
+							<div class="footer">
+								<h3 class="footer-title">Service</h3>
+								<ul class="footer-links">
+									<li>
+										<a href="/account">Mon compte</a>
+									</li>
+									<li>
+										<a href="/cart">Voir le panier</a>
+									</li>
+									<li>
+										<a href="/cart">Liste de souhaits</a>
+									</li>
+									<li>
+										<a href="#">Suivre ma commande</a>
+									</li>
+									<li>
+										<a href="#">Aide</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /ligne -->
+		</div>
+		<!-- /conteneur -->
+	</div>
+	<!-- /haut du pied de page -->
+
+	<!-- bas du pied de page -->
+	<div id="bottom-footer" class="section">
+		<div
+			class="container">
+			<!-- ligne -->
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<ul class="footer-payments">
+						<li>
+							<a href="#">
+								<i class="fa fa-cc-visa"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fa fa-credit-card"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fa fa-cc-paypal"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fa fa-cc-mastercard"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fa fa-cc-discover"></i>
+							</a>
+						</li>
+						<li>
+							<a href="#">
+								<i class="fa fa-cc-amex"></i>
+							</a>
+						</li>
+					</ul>
+					<span class="copyright">
+						Copyright &copy;<script>
+							document.write(new Date().getFullYear());
+						</script>
+						Tous droits réservés | Ce site est créé avec
+						<i class="fa fa-heart-o" aria-hidden="true"></i>
+						par
+						<a href="https://loic66600.github.io/Portfolio-personel/" target="_blank">ROSSIGNOL</a>
+					</span>
+				</div>
+			</div>
+			<!-- /ligne -->
+		</div>
+		<!-- /conteneur -->
+	</div>
+	<!-- /bas du pied de page -->
 </footer>
 <!-- /PIED DE PAGE -->

@@ -56,6 +56,7 @@ class CategoriesController extends AbstractController
             'menuCategories' => $this->categorieRepository->findAll(),
             'panier' => $panier,
             'wishlistCount' => $wishlistCount,
+            
         ]);
     }
 

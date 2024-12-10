@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Produits;
+use App\Entity\Categorie;
 use App\Entity\LignePanier;
 use App\Entity\Panier;
 use App\Entity\Status;
@@ -34,11 +35,14 @@ class CartController extends AbstractController
         } else {
             $wishlistWithRatings = [];
         }
+         // Récupérer les catégories
+         $categories = $entityManager->getRepository(Categorie::class)->findAll();
 
         return $this->render('cart/index.html.twig', [
             'panier' => $panier,
             'wishlist' => $wishlistWithRatings,
             'wishlistCount' => count($wishlistIds),
+            'menuCategories' => $categories,
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Avis;
+use App\Entity\Categorie;
 use App\Entity\User;
 use App\Repository\ProduitsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -48,6 +49,8 @@ class ProductController extends AbstractController
                 'averageRating' => $this->calculateAverageRating($product)
             ];
         }
+          // Récupérer les catégories
+          $categories = $this->entityManager->getRepository(Categorie::class)->findAll();
 
         return $this->render('product/index.html.twig', [
             'product' => $productDetails,
@@ -56,6 +59,7 @@ class ProductController extends AbstractController
             'associatedProducts' => $associatedProductsWithRatings,
             'panier' => $panier,
             'wishlistCount' => $wishlistCount,
+            'menuCategories' => $categories,
         ]);
     }
 

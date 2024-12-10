@@ -45,10 +45,9 @@ class HomeController extends AbstractController
             'categories' => $categories,
             'panier' => $panier,
             'wishlistCount' => $wishlistCount,
+            'menuCategories' => $categories,
         ]);
     }
-
-// Dans HomeController.php
 
 // Dans HomeController.php
 
@@ -82,6 +81,7 @@ public function nouveauxProduits(): Response
             'categories' => $categories,
             'panier' => $panier,
             'wishlistCount' => $wishlistCount,
+            'menuCategories' => $categories,
         ]);
     }
 

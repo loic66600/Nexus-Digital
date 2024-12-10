@@ -40,6 +40,7 @@ class SearchController extends AbstractController
             'categories' => $categories,
             'panier' => $panier,
             'wishlistCount' => $wishlistCount,
+            'menuCategories' => $categories,
         ]);
 
         
