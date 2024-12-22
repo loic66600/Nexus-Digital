@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\UserInfo;
 use App\Form\UserType;
+use App\Entity\Categorie;
 use App\Form\UserinfoType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,6 +82,8 @@ class AccountController extends AbstractController
                 return $this->redirectToRoute('app_account');
             }
         }
+         // Récupérer les catégories
+         $categories = $entityManager->getRepository(Categorie::class)->findAll();
 
         return $this->render('account/index.html.twig', [
             'user' => $user,
@@ -90,6 +93,7 @@ class AccountController extends AbstractController
             'addressForm' => isset($addressForm) ? $addressForm->createView() : null,
             'editAddressForm' => isset($editAddressForm) ? $editAddressForm->createView() : null,
             'editAddress' => isset($editAddress) ? $editAddress : null,
+            'menuCategories' => $categories,
         ]);
     }
 
